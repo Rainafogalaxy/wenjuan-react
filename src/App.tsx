@@ -4,7 +4,7 @@ import List from "./pages/List";
 function App() {
   return (
     <div className="App">
-      <h1 style={{backgroundColor:"coral"}}>问卷FE</h1>
+      <h1>问卷FE</h1>
       <List />
     </div>
   );

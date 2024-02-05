@@ -27,7 +27,17 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
             <span>{createdAt}</span>
         </div>
       </div>
-      <div>button</div>
+      <div className={style['button-container']}>
+        <div className={style.left}>
+            <button>编辑问卷</button>
+            <button>数据统计</button>
+        </div>
+        <div className={style.right}>
+            <button>标星</button>
+            <button>复制</button>
+            <button>删除</button>
+        </div>
+      </div>
     </div>
   );
 };
