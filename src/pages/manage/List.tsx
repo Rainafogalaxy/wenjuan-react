@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import QuestionCard from "../components/QuestionCard";
+import QuestionCard from "../../components/QuestionCard";
 import style from "./List.module.scss";
 const rawQuestionList = [
   {
@@ -55,14 +55,14 @@ const List: FC = () => {
         <div className={style.right}>搜索</div>
       </div>
       {/* 2 */}
-      <div className={style.content} >
+      <div className={style.content}>
         {questionList.map((item) => {
           const { _id } = item;
           return <QuestionCard key={_id} {...item} />;
         })}
       </div>
       {/* 3 */}
-      <div className={style.footer}>footer</div>
+      <div className={style.footer}>list page footer</div>
     </>
   );
 };
