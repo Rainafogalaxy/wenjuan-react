@@ -1,0 +1,39 @@
+.container {
+  height: calc(100vh - 74px - 65px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../assets//bgc.jpg");
+  background-position: 0% 100%;
+  padding-left: 700px;
+
+  .info {
+    text-align: center;
+    color: white;
+    gap: 20px;
+    border-radius: 60px;
+    backdrop-filter: blur(4px);
+    background-color: rgba(247, 247, 247, 0);
+    box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
+    border: 0px rgba(255, 255, 255, 0.4) solid;
+    border-bottom: 0px rgba(40, 40, 40, 0.35) solid;
+    border-right: 0px rgba(40, 40, 40, 0.35) solid;
+    padding: 50px;
+    .wenjuan {
+      color: rgb(249, 124, 41);
+    }
+    .zaixian {
+      color: #3d7adc;
+    }
+    button {
+      height: 55px;
+      font-size: 24px;
+      background-color: rgb(249, 124, 41);
+      border-radius: 25px;
+      font-size: 20px;
+      box-shadow: rgba(0, 0, 0, 0.2) 2px 5px 5px;
+      // padding: 10px;
+    }
+  }
+}

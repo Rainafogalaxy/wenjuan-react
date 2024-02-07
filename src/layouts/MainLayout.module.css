@@ -1,13 +1,16 @@
 .header {
   padding: 0 24px;
   height: 85px;
-  .left {
-    float: left;
-  }
-  .right {
-    float: right;
-  }
 }
+
+.header .left {
+  float: left;
+}
+
+.header .right {
+  float: right;
+}
+
 .main {
   min-height: calc(100vh - 74px - 71px);
 }
