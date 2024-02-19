@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import QuestionCard from "../../components/QuestionCard";
 import { useSearchParams } from "react-router-dom";
+import { Typography } from "antd";
 import {useTitle} from 'ahooks';
 import style from "./common.module.scss";
 const rawQuestionList = [
@@ -47,6 +48,7 @@ const rawQuestionList = [
 ];
 const List: FC = () => {
   const [questionList, setquestionList] = useState(rawQuestionList);
+  const {Title} = Typography;
   // 获取路由url参数
   // const [searchParams] = useSearchParams();
   // console.log(searchParams.get('keyword'));
@@ -57,7 +59,7 @@ const List: FC = () => {
       {/* 1 */}
       <div className={style.header}>
         <div className={style.left}>
-          <h3>我的问卷</h3>
+         <Title level={3}>我的问卷</Title>
         </div>
         <div className={style.right}>搜索</div>
       </div>
