@@ -3,6 +3,7 @@ import style from "./common.module.scss";
 import { Typography ,Empty} from "antd";
 import { useTitle } from "ahooks";
 import QuestionCard from "../../components/QuestionCard";
+import ListSearch from "../../components/ListSearch";
 
 const { Title } = Typography;
 const rawQuestionList = [
@@ -41,7 +42,9 @@ const Star: FC = () => {
         <div className={style.left}>
           <Title level={3}>星标问卷</Title>
         </div>
-        <div className={style.right}>搜索</div>
+        <div className={style.right}>
+          <ListSearch/>
+          </div>
       </div>
       <div className={style.content}>
         {questionList.length === 0 && <Empty description="暂无数据"/>}

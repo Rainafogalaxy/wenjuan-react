@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import QuestionCard from "../../components/QuestionCard";
 import { useSearchParams } from "react-router-dom";
+import ListSearch from "../../components/ListSearch";
 import { Typography } from "antd";
 import {useTitle} from 'ahooks';
 import style from "./common.module.scss";
@@ -61,7 +62,9 @@ const List: FC = () => {
         <div className={style.left}>
          <Title level={3}>我的问卷</Title>
         </div>
-        <div className={style.right}>搜索</div>
+        <div className={style.right}>
+          <ListSearch/>
+        </div>
       </div>
       {/* 2 */}
       <div className={style.content}>
