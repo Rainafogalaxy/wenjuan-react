@@ -31,14 +31,18 @@ const Register: FC = () => {
       </div>
       <div>
         <Form
-          labelCol={{ span: 6 }}
+          labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
           onFinish={onFinish}
         >
           <Form.Item<FieldType>
             label="用户名"
             name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[
+              { required: true, message: "Please input your username!" },
+              { type: "string", min: 5, max: 20 ,message:"Please be between 5-20 for the length of the characters"},
+              {pattern:/^\w+$/,message:'It can only be letters,numbers or underscores'}
+            ]}
           >
             <Input />
           </Form.Item>
@@ -52,7 +56,18 @@ const Register: FC = () => {
           <Form.Item<FieldType>
             label="确认密码"
             name="confirm"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            dependencies={['password']}  //依赖于password，password变化会重新触发validator验证
+            rules={[{ required: true, message: "Please input your password!" },
+            ({getFieldValue})=>({
+              validator(_,value){
+                if(!value ||getFieldValue('password') === value){
+                  return Promise.resolve()
+                }else{
+                  return Promise.reject(new Error("密码不一致"))
+                }
+              }
+            })
+          ]}
           >
             <Input.Password />
           </Form.Item>
