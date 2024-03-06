@@ -6,18 +6,16 @@ import style from "./Home.module.scss";
 
 // test  mockjs
 // import "../_mock/index"; //引用mock文件
-// import axios from "axios";
+import axios from "axios";
 
 const { Title, Paragraph } = Typography;
 const Home: FC = () => {
   // tip:React18 useEffect() 在开发环境下会执行两次 (React 为了帮助发现副作用错误，会故意重复调用生命周期方法)
   // tip2:mockjs只能劫持XMLRequest，不能劫持fetch请求
-  // axios内部使用的是XML API
-  // useEffect(() => {
-  //   axios.get("/api/test").then((res) => {
-  //     console.log(res);
-  //   });
-  // }, []);
+  useEffect(() => {
+    // 因为在craco里面配置了devServer，所以前面的路径不用写了,且由于是在服务端写的mock，所以不管什么请求都可以处理
+    axios.get("/api/test").then((res) => console.log(res.data));
+  }, []);
   const nav = useNavigate();
   return (
     <div className={style.container}>
