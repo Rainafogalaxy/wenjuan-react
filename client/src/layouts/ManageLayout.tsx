@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { Button, Space, Divider, message } from "antd";
 import style from "./ManageLayout.module.scss";
+import { useRequest } from "ahooks";
 import { createQuestionService } from "../services/question";
 import {
   BarsOutlined,
@@ -12,19 +13,17 @@ import {
 const ManageLayout: FC = () => {
   const nav = useNavigate();
   const { pathname } = useLocation(); //可以判断当前是哪个页面
-  const [loading, setLoading] = useState(false);
-  // 新建问卷点击函数
-  const handleCreateClick = async () => {
-    setLoading(true);
-    const data = await createQuestionService();
-    const { id } = data || {};
-    if (id) {
-      // 跳转到编辑页
-      nav(`/question/edit/${id}`);
-      message.success("开始创建");
-    }
-    setLoading(false);
-  };
+  // 如果设置了 options.manual = true，则 useRequest 不会默认执行，需要通过 run 或者 runAsync 来触发执行。
+  const {
+    loading,
+    // error,
+    run: handleCreateClick,
+  } = useRequest(createQuestionService, {
+    manual: true,
+    onSuccess: (result) => {
+      nav(`/question/edit/${result.id}`);
+    },
+  });
   return (
     <div className={style.container}>
       <div className={style.left}>
