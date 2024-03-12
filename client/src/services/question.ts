@@ -46,8 +46,15 @@ export async function updateQuestionService(
 }
 
 //复制问卷
-export async function duplicateQuestionService(id: string) {
+export async function duplicateQuestionService(id: string): Promise<ResDataType>  {
   const url = `/api/question/duplicate/${id}`;
   const data = (await axios.post(url)) as ResDataType;
+  return data;
+}
+
+// 批量彻底删除
+export async function deleteQuestionService(ids:string[]): Promise<ResDataType>  {
+  const url = "/api/question";
+  const data = (await axios.delete(url, { data:{ids} })) as ResDataType;
   return data;
 }

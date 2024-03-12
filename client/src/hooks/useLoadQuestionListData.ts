@@ -17,7 +17,7 @@ const useLoadQuestionListData = (opt: Partial<OptionType> = {}) => {
   const { isStar, isDeleted } = opt;
   const [searchParams] = useSearchParams();
   // console.log(searchParams.get("keyword"));
-  const { data, loading, error } = useRequest(
+  const { data, loading, error ,refresh} = useRequest(
     async () => {
       const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || "";
       // 分页
@@ -38,7 +38,7 @@ const useLoadQuestionListData = (opt: Partial<OptionType> = {}) => {
       refreshDeps: [searchParams], //刷新的依赖项，只要数组内的数据产生变化，上边函数就会重新执行
     }
   );
-  return { data, loading, error };
+  return { data, loading, error ,refresh};
 };
 
 export default useLoadQuestionListData;
