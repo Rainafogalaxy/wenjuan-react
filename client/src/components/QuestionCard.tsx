@@ -49,9 +49,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
     confirm({
       title: "Sure to delete?",
       icon: <ExclamationCircleOutlined />,
-      onOk: () => {
-        message.success("delete");
-      },
+      onOk: deleteQuestion,
     });
   };
   // 修改标星
@@ -68,6 +66,23 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
       },
     }
   );
+
+  const [isDeletedState, setIsDeletedState] = useState(false); //此状态用于控制点击删除的问卷不要在当前列表页显示
+  // 删除的请求
+  const { loading: delateLoading, run: deleteQuestion } = useRequest(
+    async () => {
+      const data = await updateQuestionService(_id, { isDeleted: true }); //第二个参数是要修改(更新)的信息
+      return data;
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success("删除成功");
+        setIsDeletedState(true);
+      },
+    }
+  );
+  if (isDeletedState) return null; //在这里  ： 已经点击删除的问卷，就不用再显示了
   return (
     <div className={style.container}>
       <div className={style.title}>
@@ -151,6 +166,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
               icon={<DeleteOutlined />}
               size="small"
               onClick={del}
+              disabled={delateLoading}
             >
               删除
             </Button>
