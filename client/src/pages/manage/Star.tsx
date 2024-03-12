@@ -4,6 +4,7 @@ import { Typography, Empty, Spin } from "antd";
 import { useTitle } from "ahooks";
 import QuestionCard from "../../components/QuestionCard";
 import ListSearch from "../../components/ListSearch";
+import ListPage from "../../components/ListPage";
 import useLoadQuestionListData from "../../hooks/useLoadQuestionListData";
 
 const { Title } = Typography;
@@ -35,7 +36,9 @@ const Star: FC = () => {
             return <QuestionCard key={_id} {...item} />;
           })}
       </div>
-      <div className={style.footer}>分页</div>
+      <div className={style.footer}>
+        <ListPage total={total}></ListPage>
+      </div>
     </>
   );
 };

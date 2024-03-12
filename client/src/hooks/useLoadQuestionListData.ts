@@ -1,7 +1,12 @@
 import { useRequest } from "ahooks";
 import { useSearchParams } from "react-router-dom";
 import { getQuestionListService } from "../services/question";
-import { LIST_SEARCH_PARA_KEY } from "../constant";
+import {
+  LIST_SEARCH_PARA_KEY,
+  LIST_PAGE_PARAM_KEY,
+  LIST_PAGE_SIZE_PARAM_KEY,
+  LIST_PAGE_SIZE,
+} from "../constant";
 
 type OptionType = {
   isStar: boolean;
@@ -15,7 +20,18 @@ const useLoadQuestionListData = (opt: Partial<OptionType> = {}) => {
   const { data, loading, error } = useRequest(
     async () => {
       const keyword = searchParams.get(LIST_SEARCH_PARA_KEY) || "";
-      const data = await getQuestionListService({ keyword, isStar, isDeleted });
+      // 分页
+      const page = parseInt(searchParams.get(LIST_PAGE_PARAM_KEY) || "") || 1; //默认为第一页
+      const pageSize =
+        parseInt(searchParams.get(LIST_PAGE_SIZE_PARAM_KEY) || "") ||
+        LIST_PAGE_SIZE;
+      const data = await getQuestionListService({
+        keyword,
+        isStar,
+        isDeleted,
+        page,
+        pageSize,
+      });
       return data;
     },
     {

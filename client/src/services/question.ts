@@ -5,8 +5,8 @@ type SearchOption = {
   keyword: string;
   isStar: boolean;
   isDeleted: boolean;
-  //page
-  //pageSize
+  page: Number; //一共有多少页         服务端根据这两个数据来决定如何返回数据
+  pageSize: Number; //每页有多少条
   // ...
 };
 

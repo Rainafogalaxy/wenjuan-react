@@ -1,18 +1,47 @@
 import React, { FC, useEffect, useState } from "react";
 import QuestionCard from "../../components/QuestionCard";
-// import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ListSearch from "../../components/ListSearch";
 import { Typography, Spin } from "antd";
-import { useTitle, useRequest } from "ahooks";
+import { useTitle, useRequest, useDebounceFn } from "ahooks";
 import style from "./common.module.scss";
-import useLoadQuestionListData from "../../hooks/useLoadQuestionListData";
 const List: FC = () => {
   const { Title } = Typography;
-  // 获取路由url参数
-  // const [searchParams] = useSearchParams();
-  // console.log(searchParams.get('keyword'));
-  const { data = {}, loading } = useLoadQuestionListData();
-  const { list = [], total = 0 } = data;
+  useTitle("我的问卷");
+  const [list, setList] = useState([]); //list是累计加载的数据
+  // const [loading,setLoading] = useState()
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const haveMoreData = total > list.length; // 是否有更多未加载数据
+
+  const [searchParams] = useSearchParams(); //url参数，有keyword
+  // https://ahooks.js.org/zh-CN/hooks/use-debounce-fn
+  const {
+    run: tryLoadMore, // 触发加载的函数  (这里重命名一下)
+    cancel, //取消当前防抖
+    flush, //立即调用当前防抖函数
+  } = useDebounceFn(
+    //第一个参数 : 需要防抖执行的函数  ;  第二个参数 : 配置防抖的行为
+    () => {
+      console.log("i am going to load");
+    },
+    { wait: 1000 } // 等待时间，单位为毫秒
+  );
+  // 页面初次加载，或url参数(keyword)有变化时，触发加载
+  useEffect(() => {
+    tryLoadMore();
+  }, [searchParams]);
+
+  // 监听滑动时加载
+  useEffect(() => {
+    if (haveMoreData) {
+      window.addEventListener("scroll", tryLoadMore); //防抖
+    }
+    // 组件销毁时
+    return () => {
+      window.removeEventListener("scroll", tryLoadMore); //解绑事件
+    };
+  }, [searchParams]);
   return (
     <>
       {/* 1 */}

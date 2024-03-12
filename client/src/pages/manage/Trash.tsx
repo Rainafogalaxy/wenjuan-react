@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { useTitle } from "ahooks";
+import ListPage from "../../components/ListPage";
 import style from "./common.module.scss";
 import {
   Typography,
@@ -106,6 +107,9 @@ const Trash: FC = () => {
           <Empty description="暂无数据"></Empty>
         )}
         {list.length > 0 && TableElem}
+      </div>
+      <div className={style.footer}>
+        <ListPage total={total} />
       </div>
     </>
   );
