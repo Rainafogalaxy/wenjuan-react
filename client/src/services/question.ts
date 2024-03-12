@@ -1,6 +1,13 @@
 import axios from "./ajax";
 import type { ResDataType } from "./ajax";
 
+type SearchOption = {
+  keyword: string;
+  //page
+  //pageSize
+  // ...
+};
+
 // 获取单个问卷信息
 export async function getQuestionService(id: string): Promise<ResDataType> {
   const url = `/api/question/${id}`;
@@ -16,8 +23,11 @@ export async function createQuestionService(): Promise<ResDataType> {
 }
 
 // 获取(查询)问卷列表
-export async function getQuestionListService(): Promise<ResDataType> {
+export async function getQuestionListService(
+  // 这里的Partial意思是定义的SearchOption类型
+  opt: Partial<SearchOption> = {}
+): Promise<ResDataType> {
   const url = "/api/question";
-  const data = (await axios.get(url)) as ResDataType;
+  const data = (await axios.get(url, { params: opt })) as ResDataType;
   return data;
 }
