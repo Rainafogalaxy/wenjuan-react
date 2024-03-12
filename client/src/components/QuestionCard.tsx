@@ -1,7 +1,10 @@
 import React, { FC, useState } from "react";
 import style from "./QuestionCard.module.scss";
 import { Button, Space, Divider, Tag, Popconfirm, Modal, message } from "antd";
-import { updateQuestionService } from "../services/question";
+import {
+  updateQuestionService,
+  duplicateQuestionService,
+} from "../services/question";
 import { useRequest } from "ahooks";
 import {
   EditOutlined,
@@ -26,9 +29,22 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
   const nav = useNavigate();
   const { confirm } = Modal;
   const { _id, title, isStar, createdAt, answerCount, isPublished } = props;
-  const duplicate = () => {
-    message.success("DohKyungSoo");
-  };
+
+  // 复制的请求函数
+  const { loading: duplicateLoading, run: duplicate } = useRequest(
+    async () => {
+      const data = await duplicateQuestionService(_id);
+      return data;
+    }, //这里注意，如果写了花括号，就一定要写return
+    {
+      manual: true,
+      onSuccess(result) {
+        //返回的结果通过result参数获取
+        message.success("复制成功");
+        nav(`/question/edit/${result.id}`); //跳转到问卷编辑页
+      },
+    }
+  );
   const del = () => {
     confirm({
       title: "Sure to delete?",
@@ -121,7 +137,12 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
               cancelText="cancel"
               onConfirm={duplicate}
             >
-              <Button type="text" icon={<CopyOutlined />} size="small">
+              <Button
+                type="text"
+                icon={<CopyOutlined />}
+                size="small"
+                disabled={duplicateLoading}
+              >
                 复制
               </Button>
             </Popconfirm>
