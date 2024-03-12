@@ -2,7 +2,7 @@ import { useRequest } from "ahooks";
 import { useSearchParams } from "react-router-dom";
 import { getQuestionListService } from "../services/question";
 import {
-  LIST_SEARCH_PARA_KEY,
+  LIST_SEARCH_PARAM_KEY,
   LIST_PAGE_PARAM_KEY,
   LIST_PAGE_SIZE_PARAM_KEY,
   LIST_PAGE_SIZE,
@@ -19,7 +19,7 @@ const useLoadQuestionListData = (opt: Partial<OptionType> = {}) => {
   // console.log(searchParams.get("keyword"));
   const { data, loading, error } = useRequest(
     async () => {
-      const keyword = searchParams.get(LIST_SEARCH_PARA_KEY) || "";
+      const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || "";
       // 分页
       const page = parseInt(searchParams.get(LIST_PAGE_PARAM_KEY) || "") || 1; //默认为第一页
       const pageSize =
