@@ -3,7 +3,8 @@
 const Mock = require("mockjs");
 const Random = Mock.Random;
 
-const getQuestionList = (len = 30, isDeleted = false) => {
+const getQuestionList = (opt = {}) => {
+  const { len = 10, isDeleted = false, isStar = false } = opt;
   //默认不是假删除的
   const list = [];
   for (let i = 0; i < len; i++) {
@@ -11,7 +12,7 @@ const getQuestionList = (len = 30, isDeleted = false) => {
       _id: Random.id(),
       title: Random.ctitle(),
       isPublished: Random.boolean(),
-      isStar: Random.boolean(),
+      isStar,
       answerCount: Random.natural(50, 100), //返回一个50-100的自然数
       createdAt: Random.datetime(),
       isDeleted, //假删除

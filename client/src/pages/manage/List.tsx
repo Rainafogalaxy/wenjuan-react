@@ -1,19 +1,18 @@
 import React, { FC, useEffect, useState } from "react";
 import QuestionCard from "../../components/QuestionCard";
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 import ListSearch from "../../components/ListSearch";
 import { Typography, Spin } from "antd";
 import { useTitle, useRequest } from "ahooks";
 import style from "./common.module.scss";
-import { getQuestionListService } from "../../services/question";
-
+import useLoadQuestionListData from "../../hooks/useLoadQuestionListData";
 const List: FC = () => {
   const { Title } = Typography;
   // 获取路由url参数
   // const [searchParams] = useSearchParams();
   // console.log(searchParams.get('keyword'));
-  const { data = {}, loading } = useRequest(getQuestionListService);
-  const { list = [], total } = data;
+  const { data = {}, loading } = useLoadQuestionListData();
+  const { list = [], total = 0 } = data;
   return (
     <>
       {/* 1 */}

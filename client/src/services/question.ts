@@ -3,6 +3,8 @@ import type { ResDataType } from "./ajax";
 
 type SearchOption = {
   keyword: string;
+  isStar: boolean;
+  isDeleted: boolean;
   //page
   //pageSize
   // ...
@@ -24,7 +26,7 @@ export async function createQuestionService(): Promise<ResDataType> {
 
 // 获取(查询)问卷列表
 export async function getQuestionListService(
-  // 这里的Partial意思是定义的SearchOption类型
+  // 这里的Partial意思是定义的SearchOption类型的一部分
   opt: Partial<SearchOption> = {}
 ): Promise<ResDataType> {
   const url = "/api/question";
