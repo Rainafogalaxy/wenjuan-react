@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_PATHNAME } from "../router";
 import { UserOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { getUserInfoService } from "../services/user";
 import { useRequest } from "ahooks";
 import { removeToken } from "../utils/user-token";
@@ -13,6 +13,7 @@ const UserInfo: FC = () => {
   const logout = () => {
     nav(LOGIN_PATHNAME);
     removeToken();
+    message.success("退出成功");
   };
   // 已登录
   const UserInfo = (
