@@ -1,9 +1,11 @@
 import React, { FC } from "react";
 import { UserAddOutlined } from "@ant-design/icons";
-import { Typography, Space, Form, Input, Button } from "antd";
+import { Typography, Space, Form, Input, Button, message } from "antd";
 import style from "./Register.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_PATHNAME } from "../router";
+import { useRequest } from "ahooks";
+import { registerService } from "../services/user";
 
 const { Title } = Typography;
 type FieldType = {
@@ -15,8 +17,24 @@ type FieldType = {
 };
 
 const Register: FC = () => {
+  const nav = useNavigate();
+  // 这里的values就是点击提交之后表单的信息
+  const { run } = useRequest(
+    async (values) => {
+      const { username, password, nickname } = values;
+      await registerService(username, password, nickname);
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success("注册成功");
+        // 注册成功之后导航到登录页面
+        nav(LOGIN_PATHNAME);
+      },
+    }
+  );
   const onFinish = (values: any) => {
-    console.log(values);
+    run(values);
   };
   return (
     <div className={style.container}>
@@ -40,8 +58,17 @@ const Register: FC = () => {
             name="username"
             rules={[
               { required: true, message: "Please input your username!" },
-              { type: "string", min: 5, max: 20 ,message:"Please be between 5-20 for the length of the characters"},
-              {pattern:/^\w+$/,message:'It can only be letters,numbers or underscores'}
+              {
+                type: "string",
+                min: 5,
+                max: 20,
+                message:
+                  "Please be between 5-20 for the length of the characters",
+              },
+              {
+                pattern: /^\w+$/,
+                message: "It can only be letters,numbers or underscores",
+              },
             ]}
           >
             <Input />
@@ -56,18 +83,19 @@ const Register: FC = () => {
           <Form.Item<FieldType>
             label="确认密码"
             name="confirm"
-            dependencies={['password']}  //依赖于password，password变化会重新触发validator验证
-            rules={[{ required: true, message: "Please input your password!" },
-            ({getFieldValue})=>({
-              validator(_,value){
-                if(!value ||getFieldValue('password') === value){
-                  return Promise.resolve()
-                }else{
-                  return Promise.reject(new Error("密码不一致"))
-                }
-              }
-            })
-          ]}
+            dependencies={["password"]} //依赖于password，password变化会重新触发validator验证
+            rules={[
+              { required: true, message: "Please input your password!" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  } else {
+                    return Promise.reject(new Error("密码不一致"));
+                  }
+                },
+              }),
+            ]}
           >
             <Input.Password />
           </Form.Item>
