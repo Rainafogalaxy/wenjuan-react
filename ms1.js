@@ -81,7 +81,90 @@ document.getElementById('btn').addEventListener('click',()=>{
 // img是支持跨域的标签  可以通过script,link,img标签
 
 但使用script和link会有两个问题，就是必须把这两个标签挂载到页面，才会真正发起请求，而反复的dom操作会造成页面的性能问题，而且载入js/css资源会阻塞页面的渲染，影响用户体验，
-因此对于需要频繁上报的埋点而言，它们两个不合适
+因此对于需要频繁上报的埋点而言，它们两个不合适(因为dom的改变会使浏览器的渲染流水线重复执行)
+
+而img可以不用挂载到页面(避免反复操作DOM)，img的加载不会阻塞HTML的解析，但img加载后并不渲染，他需要等待Render Tree生成完后才和Render Tree一起渲染出来
+(通常埋点上报会使用gif图，合法的gif图只需要43个字节)
+
+当通过<img>标签的src属性请求一个图片资源时，服务器可以记录请求的URL，并从中解析出所需的数据，这种方式不需要等待服务器的响应
+
+
+const imgPointBurring = (data)=>{
+    //将事件对象转换为查询字符串
+    const queryString = Object.keys(data).map(key=>`${encodeURIComponent(key)}=${endoceURIComponent(eventData[key])}`.join('&'));
+    // 创建一个新的<img>标签来发送埋点请求
+    const img = new Image();
+    img.src = `https://my-tracking-server.com/track?${queryString}`;
+    // 可选:设置一个很短的超时时间，避免长时间等待图片加载
+    img.timeout = 1000;
+    // 防止图片请求时间长占用内存，当图片加载完成或失败时解除引用
+    img.onload = img.onerror = ()=>{
+        img.onload = img.onerror = null;
+    }
+}
+
+document.getElementById('btn').addEventListener("click",()=>{
+    imgPointBurring({
+        eventName:'btn-click',
+        eventTime: new Date().toISOSting(),
+        userId: '',
+        buttonId: ''
+    })
+})
+
+// 第三种：navigator.sendBeacon()   --->  可用于通过HTTP POST将少量数据 异步 传输到Web服务器
+接受两个参数，第一个参数是hi目标服务器的url，第二个参数是要发送的数据
+[它主要用于将统计数据发送到Web服务器，同时避免了用传统技术(如XMLHttpRequest)发送分析数据的一些问题]
+
+sendBeacon如果成功进入浏览器的发送队列后，会返回true，如果受到队列总数，数据大小的限制后，会返回false，返回true后，只是表示进入了发送队列，浏览器会尽力保证发送成功，但是否成功不会有返回值
+
+sendBeacon是异步的，不会影响当前页面到下一个页面的跳转速度，且不受同域限制
+(tip:它在支付宝中可能会被拦截)
+
+常见埋点行为：
+(1).点击触发埋点:当点击目标元素时，触发埋点上报
+fucntion clickBtn(url,data){
+    navigator.sendBeacon(url,data)
+}
+
+(2).页面停留时间上报埋点
+路由文件中，初始化一个startTime，当页面离开时通过路由守卫计算停留时间
+let url = '';  // 这个是上报地址
+let startTime = Date.now()
+let currentTime = '';
+router.beforeEach((to,from,next)=>{
+    if(to){
+        currentTime = Date.now();
+        stayTime = parseInt(currentTime-startTime);
+        navigator.sendBeacon(url,{time:styleTime});
+        startTime = Date.now();
+    }
+})
+
+(3).错误监听埋点
+通过监听函数接收错误信息
+
+1.Vue错误捕获(全局错误处理) :
+app.config.errorHandler = (err)=>{
+    navigator.sendBeacon(url,{error:error.messgae,text:"vue运行异常"})
+}
+
+2.JS异常与静态资源加载异常
+window.addeventListener("error",(error)=>{
+    if(error.message){
+        navigator.sendBeacon(url,{error:error.message,text:"js执行异常"})
+    }else{
+        navigator.sendBeacon(url,{error:error.filename,text:"资源加载异常"})
+    }
+}，true)
+
+
+--------------------------------------
+Vue3错误捕获：
+(1).组件错误捕获
+在Vue3中，可以使用errorCaptured生命周期钩子来捕获组件树中所有后代组件的错误，
+这个钩子可以在任何组件中使用，用于捕获和处理从子组件抛出的错误
+https://cn.vuejs.org/api/composition-api-lifecycle.html#onerrorcaptured
 
 
 
@@ -89,7 +172,65 @@ document.getElementById('btn').addEventListener('click',()=>{
 
 
 
-3.单点登录
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3.单点登录SSO
 
 
 
