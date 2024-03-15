@@ -158,6 +158,84 @@ window.addeventListener("error",(error)=>{
     }
 }，true)
 
+3.请求捕获错误
+axios.interceptors.response.use((response)=>{
+    if(response.code == 200){
+        return Promise.resolve(response);
+    }else{
+        return Promise.reject(response);
+    }
+}),
+(error)=>{
+    navigator.sendBeacon(url,{error:error,text:"请求错误异常"})
+}
+
+(4)内容可见埋点
+通过交插观察器去监听当前元素是否出现在页面
+
+// 可见性发生变化后的回调
+function callback(data){
+    navigator.sendBeacon(url,{target:data[0].target,text:"内容可见"})
+}
+let options = {};
+const observer = new IntersectionObserver(callback);
+let target  = document.getElementById("target");
+// 监听目标元素
+observer.obser(target);
+
+-------------------------------------@@@@@-------------------------------
+使用：
+
+//sendBeacon上报
+export async function sendBeacon({url = "",params}:reportParams){  //reportParams 是一个定义的类型
+    if(navigator?.sendBeacon && url){
+        const isSuccess = await navigator?.sendBeacon(url,JSON.stringify(params));
+        if(success) return true
+    }
+    return false;
+}
+
+// img上报
+
+export function sendImg({img = "",params}:reportParams){
+    return new Promise<boolean>((resolve,reject)=>{
+        const imageData = objectToQueryString(params);
+        const img_o = new Image();
+        img_o.onload = ()=>resolve(true);
+        img_o.onerror = ()=>reject(false);
+        img_o.src = `${img}?${imageData}`
+    })
+}
+
+// ajax上报
+
+export function sendAjax({req = "",params}:reportParams){
+    return new Promise<boolean>((resolve,reject)=>{
+        if(req){
+            postAction(req,params)
+            .then(()=>resolve(true))
+            .catch(()=>reject(false))
+        }else{
+            reject(false);
+        }
+    })
+}
+
+export async function reportEvent(params:reportParams,reportType:string[] = [IMG,BEACON,AJAX]){
+    let finalType = false;
+    for(const key in reportType){
+        if(!finalType){
+            try{
+                await EVENT_REPORT_FUNCTION_MAP[key](params).then(()=>{
+                    finalType = true;
+                })
+            }catch(error){
+                console.log(error)
+            }
+        }
+    }
+    return finalType;
+}
 
 --------------------------------------
 Vue3错误捕获：
