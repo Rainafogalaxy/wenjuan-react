@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      const arr = [1, { a: "hello" }, "DohKyungSoo"];
+      const obj = {
+        love: "D.O.",
+        kiyo: "yes",
+      };
+      const set = new Set([520, "D.O.", "kiyo"]);
+      const map = new Map();
+      map.set(["yes"], ["D.O."]);
+      map.set(
+        {
+          thank: "hi",
+        },
+        false
+      );
+      //   console.log(map);
+      for (const i in map) {
+        console.log();
+      }
+      //   console.log(set);
+      //   for (const i of set) {    //for...in不能遍历set和map结构
+      //     console.log(i);
+      //   }
+      //   for (const i in arr) {
+      //     console.log(arr[i], i);
+      //   }
+      //   for (const s of arr) {
+      //     console.log(s);
+      //   }
+    </script>
+  </head>
+  <body></body>
+</html>
