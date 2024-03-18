@@ -3,14 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_PATHNAME } from "../router";
 import { UserOutlined } from "@ant-design/icons";
 import { Button, message } from "antd";
-import { getUserInfoService } from "../services/user";
-import { useRequest } from "ahooks";
+// import { getUserInfoService } from "../services/user";
+// import { useRequest } from "ahooks";
 import { removeToken } from "../utils/user-token";
+import useGetUserInfo from "../hooks/useGetUserInfo";
+import { UseDispatch, useDispatch } from "react-redux";
+import { logoutReducer } from "../store/userReducer";
 const UserInfo: FC = () => {
-  const { data } = useRequest(getUserInfoService);
-  const { username, nickname } = data || {};
+  // const { data } = useRequest(getUserInfoService);
+  // const { username, nickname } = data || {};
+  const { username, nickname } = useGetUserInfo();
+  const dispatch = useDispatch();
   const nav = useNavigate();
   const logout = () => {
+    dispatch(logoutReducer()); //清空 redux user数据
     nav(LOGIN_PATHNAME);
     removeToken();
     message.success("退出成功");
