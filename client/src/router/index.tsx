@@ -14,6 +14,7 @@ import Trash from "../pages/manage/Trash";
 import Star from "../pages/manage/Star";
 import Edit from "../pages/question/Edit";
 import Stat from "../pages/question/Stat";
+import path from "path";
 
 const router = createBrowserRouter([
   {
@@ -77,3 +78,9 @@ export const HOME_PATHNAME = "/";
 export const LOGIN_PATHNAME = "/login";
 export const REGISTER_PATHNAME = "/register";
 export const MANAGE_INDEX_PATHNAME = "/manage/list";
+
+export function isLoginOrRegister(pathname: string) {
+  //判断当前路由是不是登录页或注册页
+  if ([LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) return true;
+  return false;
+}

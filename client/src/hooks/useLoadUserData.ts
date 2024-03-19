@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useGetUserInfo from "./useGetUserInfo";
 import { useRequest } from "ahooks";
 import { getUserInfoService } from "../services/user";
-import { UseDispatch, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginReducer } from "../store/userReducer";
 const useLoadUserData = () => {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ const useLoadUserData = () => {
   useEffect(() => {
     if (username) {
       setWaitingUserData(false); //已经请求过
+      return; //tip：因为没写这个return，所以一直在请求  OK
     }
     run(); //如果redux中没有，发起请求
   }, [username]);

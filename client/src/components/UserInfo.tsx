@@ -7,7 +7,7 @@ import { Button, message } from "antd";
 // import { useRequest } from "ahooks";
 import { removeToken } from "../utils/user-token";
 import useGetUserInfo from "../hooks/useGetUserInfo";
-import { UseDispatch, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logoutReducer } from "../store/userReducer";
 const UserInfo: FC = () => {
   // const { data } = useRequest(getUserInfoService);
@@ -17,9 +17,9 @@ const UserInfo: FC = () => {
   const nav = useNavigate();
   const logout = () => {
     dispatch(logoutReducer()); //清空 redux user数据
-    nav(LOGIN_PATHNAME);
     removeToken();
     message.success("退出成功");
+    nav(LOGIN_PATHNAME);
   };
   // 已登录
   const UserInfo = (
