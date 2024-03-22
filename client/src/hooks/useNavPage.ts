@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import useGetUserInfo from "./useGetUserInfo";
 import { useLocation, useNavigate } from "react-router-dom";
-import { MANAGE_INDEX_PATHNAME, isLoginOrRegister } from "../router";
+import {
+  LOGIN_PATHNAME,
+  MANAGE_INDEX_PATHNAME,
+  isLoginOrRegister,
+  isNoNeedUserInfo,
+} from "../router";
+
 const useNavPage = (waitingUserData: boolean) => {
   const { username } = useGetUserInfo();
   const { pathname } = useLocation();
@@ -17,8 +23,12 @@ const useNavPage = (waitingUserData: boolean) => {
       return;
     }
     // 未登录
-    
-  }, [username, pathname]);
+    if (isNoNeedUserInfo(pathname)) {
+      return;
+    } else {
+      nav(LOGIN_PATHNAME); //跳转到登录页
+    }
+  }, [username, pathname, waitingUserData]);
 };
 
 export default useNavPage;

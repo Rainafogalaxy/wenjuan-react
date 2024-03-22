@@ -11,6 +11,17 @@ module.exports = [
         data: {
           id: Random.id(),
           title: Random.ctitle(),
+          componentList: [
+            // Title
+            {
+              id: Random.id(),
+              type: "questionTitle",
+              title: "标题",
+              props: "",
+            }, // 组件类型不能重复，需要前后端统一
+            // Input
+            { id: Random.id(), type: "InputTittle", title: "输入框" },
+          ],
         },
       };
     },

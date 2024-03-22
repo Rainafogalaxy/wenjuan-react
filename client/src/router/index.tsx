@@ -84,3 +84,11 @@ export function isLoginOrRegister(pathname: string) {
   if ([LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) return true;
   return false;
 }
+export function isNoNeedUserInfo(pathname: string) {
+  // 登录页，注册页，首页是不需要登录的
+  if ([HOME_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) {
+    return true;
+  } else {
+    return false;
+  }
+}
