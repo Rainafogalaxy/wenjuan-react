@@ -37,7 +37,29 @@ export const componentsSlice = createSlice({
         draft.selectedId = action.payload; //payload是string类型，就是要修改的id
       }
     ),
+    // 添加新组件
+    addComponent: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<ComponentInfoType>
+      ) => {
+        const newComponent = action.payload;
+        // 如果当前没有选中任何组件，点击添加组件应该添加到最下边，否则插入到选择的组件的下边
+        // 要获取当前选中的组件(selectedId)
+        const { selectedId, componentList } = draft;
+        const index = componentList.findIndex((c) => c.fe_id === selectedId);
+        // 说明未选中任何组件
+        if (index < 0) {
+          draft.componentList.push(newComponent); //添加到最后一个
+        } else {
+          // 选中组件，插入到index后边
+          draft.componentList.splice(index + 1, 0, newComponent);
+        }
+        draft.selectedId = newComponent.fe_id;
+      }
+    ),
   },
 });
-export const { resetComponents, changeSelectedId } = componentsSlice.actions;
+export const { resetComponents, changeSelectedId, addComponent } =
+  componentsSlice.actions;
 export default componentsSlice.reducer;

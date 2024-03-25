@@ -4,6 +4,7 @@ import style from "./index.module.scss";
 import EditCanvas from "./EditCanvas";
 import { useDispatch } from "react-redux";
 import { changeSelectedId } from "../../../store/componentsReducer";
+import LeftPanel from "./LeftPanel";
 const Edit: FC = () => {
   // 此页面是问卷编辑页面
   const dispatch = useDispatch();
@@ -16,7 +17,9 @@ const Edit: FC = () => {
       <div style={{ backgroundColor: "#fff", height: "40px" }}>Header</div>
       <div className={style["content-wrapper"]}>
         <div className={style.content}>
-          <div className={style.left}>Left</div>
+          <div className={style.left}>
+            <LeftPanel />
+          </div>
           {/* 背景空白处 */}
           <div className={style.main} onClick={clearSelectedId}>
             <div className={style["canvas-wrapper"]}>
