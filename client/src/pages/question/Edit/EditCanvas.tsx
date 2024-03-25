@@ -1,11 +1,14 @@
-import React, { FC } from "react";
+import React, { FC, MouseEvent } from "react";
 import { Spin } from "antd";
 import style from "./EditCanvas.module.scss";
-// import QuestionTitle from "../../../components/QuestionComponents/QuestionTitle/Component";
-// import QuestionInput from "../../../components/QuestionComponents/QuestionInput/Component";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
 import { getComponentConfigByType } from "../../../components/QuestionComponents/index";
-import { ComponentInfoType } from "../../../store/componentsReducer";
+import {
+  ComponentInfoType,
+  changeSelectedId,
+} from "../../../store/componentsReducer";
+import { useDispatch } from "react-redux";
+import classNames from "classnames"; //classnames是一个库，用于方便地动态构建className字符串，可以根据组件的状态或属性来条件性地添加或合并类名，从而简化在JSX中处理css类名的逻辑
 type PropsType = {
   loading: boolean;
 };
@@ -17,10 +20,14 @@ const getComponent = (componentInfo: ComponentInfoType) => {
   const { Component } = componentConfig;
   return <Component {...props} />;
 };
-const EditCanvas: FC<PropsType> = ({ loading }) => {
-  const { componentList } = useGetComponentInfo();
-  // console.log(componentList);
 
+const EditCanvas: FC<PropsType> = ({ loading }) => {
+  const { componentList, selectedId } = useGetComponentInfo(); //componentList是从后端返回的一个组件列表
+  const dispatch = useDispatch();
+  const handleClick = (event: MouseEvent, id: string) => {
+    event.stopPropagation(); //阻止冒泡(否则点击此按钮，会冒泡到外侧的main，样式会消失)
+    dispatch(changeSelectedId(id));
+  };
   if (loading) {
     return (
       <div style={{ textAlign: "center", marginTop: "24px" }}>
@@ -34,8 +41,21 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
     <div className={style.canvas}>
       {componentList.map((c) => {
         const { fe_id } = c;
+        // 拼接class name
+        const wrapperDefaultClassName = style["component-wrapper"]; //默认的样式
+        const selectedClassName = style.selected;
+        const wrapperClassName = classNames({
+          [wrapperDefaultClassName]: true,
+          [selectedClassName]: fe_id === selectedId,
+        });
         return (
-          <div className={style["component-wrapper"]} key={fe_id}>
+          <div
+            className={wrapperClassName}
+            key={fe_id}
+            onClick={(e) => {
+              handleClick(e, fe_id);
+            }}
+          >
             <div className={style.component}>{getComponent(c)}</div>
           </div>
         );

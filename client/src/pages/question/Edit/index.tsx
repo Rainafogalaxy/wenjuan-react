@@ -2,8 +2,14 @@ import React, { FC, useEffect, useState } from "react";
 import useLoadQuestionData from "../../../hooks/useLoadQuestionData";
 import style from "./index.module.scss";
 import EditCanvas from "./EditCanvas";
+import { useDispatch } from "react-redux";
+import { changeSelectedId } from "../../../store/componentsReducer";
 const Edit: FC = () => {
   // 此页面是问卷编辑页面
+  const dispatch = useDispatch();
+  const clearSelectedId = () => {
+    dispatch(changeSelectedId(""));
+  };
   const { loading } = useLoadQuestionData();
   return (
     <div className={style.container}>
@@ -11,10 +17,11 @@ const Edit: FC = () => {
       <div className={style["content-wrapper"]}>
         <div className={style.content}>
           <div className={style.left}>Left</div>
-          <div className={style.main}>
+          {/* 背景空白处 */}
+          <div className={style.main} onClick={clearSelectedId}>
             <div className={style["canvas-wrapper"]}>
               {/* <EditCanvas /> */}
-              <EditCanvas loading={loading}/>
+              <EditCanvas loading={loading} />
             </div>
           </div>
           <div className={style.right}>Right</div>

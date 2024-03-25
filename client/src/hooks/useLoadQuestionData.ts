@@ -37,8 +37,13 @@ const useLoadQuestionData = () => {
   useEffect(() => {
     if (!data) return;
     const { title = "", componentList = [] } = data;
+    // 获取默认的selectedId
+    let selectedId = ""; //默认选中第一个
+    if (componentList.length > 0) {
+      selectedId = componentList[0].fe_id;
+    }
     // 把componentList存到redux中
-    dispatch(resetComponents({ componentList }));
+    dispatch(resetComponents({ componentList, selectedId }));
   }, [data]);
 
   // 判断 id 变化，执行ajax加载问卷数据
