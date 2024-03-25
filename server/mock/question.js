@@ -14,13 +14,24 @@ module.exports = [
           componentList: [
             // Title
             {
-              id: Random.id(),
+              fe_id: Random.id(),
               type: "questionTitle",
               title: "标题",
-              props: "",
+              props: { text: "个人信息调研", level: 1, isCenter: false },
             }, // 组件类型不能重复，需要前后端统一
             // Input
-            { id: Random.id(), type: "InputTittle", title: "输入框" },
+            {
+              fe_id: Random.id(),
+              type: "questionInput",
+              title: "输入框",
+              props: { title: "你的姓名", placeholder: "请输入姓名..." },
+            },
+            {
+              fe_id: Random.id(),
+              type: "questionInput",
+              title: "输入框2",
+              props: { title: "你的电话", placeholder: "请输入电话..." },
+            },
           ],
         },
       };

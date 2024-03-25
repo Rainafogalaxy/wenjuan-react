@@ -14,7 +14,7 @@ const Edit: FC = () => {
           <div className={style.main}>
             <div className={style["canvas-wrapper"]}>
               {/* <EditCanvas /> */}
-              <EditCanvas/>
+              <EditCanvas loading={loading}/>
             </div>
           </div>
           <div className={style.right}>Right</div>
