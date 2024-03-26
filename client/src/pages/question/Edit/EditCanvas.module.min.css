@@ -1,0 +1,1 @@
+.canvas{min-height:100%;background-color:#fff;overflow:hidden;padding:15px}.component-wrapper{margin:12px;border:1px solid #fff;padding:12px;border-radius:3px;transition:all 0.3s}.component-wrapper:hover{border-color:#d9d9d9;border-radius:13px}.selected{border-color:#1890ff !important;border-radius:13px}.locked{opacity:0.5;cursor:not-allowed}.component{pointer-events:none}

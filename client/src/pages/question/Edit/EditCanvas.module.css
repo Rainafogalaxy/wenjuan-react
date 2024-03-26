@@ -11,15 +11,15 @@
   padding: 12px;
   border-radius: 3px;
   transition: all 0.3s;
+}
 
-  &:hover {
-    border-color: #d9d9d9;
-    border-radius: 13px;
-  }
+.component-wrapper:hover {
+  border-color: #d9d9d9;
+  border-radius: 13px;
 }
 
 .selected {
-  border-color: #1890ff !important; //防止和上方hover冲突
+  border-color: #1890ff !important;
   border-radius: 13px;
 }
 
@@ -27,6 +27,7 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .component {
-  pointer-events: none; // 屏蔽鼠标行为，组件不让被点击到
+  pointer-events: none;
 }
