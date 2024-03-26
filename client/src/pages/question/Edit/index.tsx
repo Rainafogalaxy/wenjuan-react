@@ -5,6 +5,7 @@ import EditCanvas from "./EditCanvas";
 import { useDispatch } from "react-redux";
 import { changeSelectedId } from "../../../store/componentsReducer";
 import LeftPanel from "./LeftPanel";
+import RightPanel from "./RightPanel";
 const Edit: FC = () => {
   // 此页面是问卷编辑页面
   const dispatch = useDispatch();
@@ -27,7 +28,9 @@ const Edit: FC = () => {
               <EditCanvas loading={loading} />
             </div>
           </div>
-          <div className={style.right}>Right</div>
+          <div className={style.right}>
+            <RightPanel />
+          </div>
         </div>
       </div>
     </div>

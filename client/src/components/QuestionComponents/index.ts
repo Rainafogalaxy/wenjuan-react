@@ -11,6 +11,7 @@ export type ComponentConfigType = {
   type: string;
   Component: FC<ComponentPropsType>;
   defaultProps: ComponentPropsType;
+  PropComponent: FC<ComponentPropsType>;
 };
 // 全部组件配置的列表(把所有组件类型写成一个数组(列表))
 const componentConfigList: ComponentConfigType[] = [
