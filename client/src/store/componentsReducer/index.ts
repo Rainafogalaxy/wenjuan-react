@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "../../components/QuestionComponents";
 import { produce } from "immer";
+import { getNextSelectedId } from "./utils";
 export type ComponentInfoType = {
   fe_id: string;
   type: string;
@@ -75,6 +76,15 @@ export const componentsSlice = createSlice({
         }
       }
     ),
+
+    // 删除选中组件
+    removeSelectedComponent: produce((draft: ComponentsStateType) => {
+      const { componentList = [], selectedId: removedId } = draft;
+      // 重新计算selectedId
+
+      const index = componentList.findIndex((c) => c.fe_id === removedId);
+      componentList.splice(index, 1);
+    }),
   },
 });
 export const {
@@ -82,5 +92,6 @@ export const {
   changeSelectedId,
   addComponent,
   changeComponentProps,
+  removeSelectedComponent,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;
