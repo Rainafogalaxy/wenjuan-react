@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { changeSelectedId } from "../../../store/componentsReducer";
 import LeftPanel from "./LeftPanel";
 import RightPanel from "./RightPanel";
+import EditHeader from "./EditHeader";
 const Edit: FC = () => {
   // 此页面是问卷编辑页面
   const dispatch = useDispatch();
@@ -15,9 +16,12 @@ const Edit: FC = () => {
   const { loading } = useLoadQuestionData();
   return (
     <div className={style.container}>
-      <div style={{ backgroundColor: "#fff", height: "40px" }}>Header</div>
+      <div style={{ backgroundColor: "#fff", height: "40px" }}>
+        <EditHeader />
+      </div>
       <div className={style["content-wrapper"]}>
         <div className={style.content}>
+          {/* 左侧 */}
           <div className={style.left}>
             <LeftPanel />
           </div>
@@ -28,6 +32,7 @@ const Edit: FC = () => {
               <EditCanvas loading={loading} />
             </div>
           </div>
+          {/* 右侧 */}
           <div className={style.right}>
             <RightPanel />
           </div>

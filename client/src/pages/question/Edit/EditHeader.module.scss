@@ -1,0 +1,28 @@
+.header-wrapper {
+  background-color: #fff;
+  //   border-bottom: 1px solid #e8e8e8;
+  //   padding-top: 12px;
+  //   margin-top: 12px;
+}
+.header {
+  display: flex;
+  margin: 0 24px;
+  align-items: center;
+  h1 {
+    font-size: 18px;
+    margin-bottom: 0;
+    line-height: 1;
+  }
+  .left {
+    flex: 1;
+  }
+  .main {
+    flex: 1;
+    text-align: center;
+  }
+  .right {
+    flex: 1;
+    text-align: right;
+    margin-right: 10px;
+  }
+}
