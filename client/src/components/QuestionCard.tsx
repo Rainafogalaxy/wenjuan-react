@@ -17,7 +17,7 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 
 type PropsType = {
-  _id: string;
+  _id: string; //服务端使用 _id
   title: string;
   isStar: boolean;
   isPublished: boolean;

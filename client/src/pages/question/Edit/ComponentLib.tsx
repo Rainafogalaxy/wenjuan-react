@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Typography } from "antd";
 import { nanoid } from "nanoid";
-import style from "./ComponentsLib.module.scss";
+import style from "./ComponentLib.module.scss";
 import { addComponent } from "../../../store/componentsReducer";
 import {
   ComponentConfigType,
@@ -19,7 +19,7 @@ const Lib: FC = () => {
       // 点击后将组件添加到画布，并默认选中此组件
       dispatch(
         addComponent({
-          fe_id: nanoid(), //生成一个不重复的ID
+          fe_id: nanoid(), //生成一个不重复的ID,前端生成的id
           title,
           type,
           props: defaultProps,
