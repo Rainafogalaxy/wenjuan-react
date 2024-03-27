@@ -1,4 +1,4 @@
-import { ComponentInfoType } from ".";
+import { ComponentInfoType, ComponentsStateType } from ".";
 export function getNextSelectedId(
   fe_id: string,
   componentList: Array<ComponentInfoType>
@@ -24,4 +24,23 @@ export function getNextSelectedId(
     }
   }
   return newSelectedId;
+}
+
+// 抽离添加组件和复制组件到canvas的函数
+export function insertNewComponent(
+  draft: ComponentsStateType,
+  newComponent: ComponentInfoType
+) {
+  // 如果当前没有选中任何组件，点击添加组件应该添加到最下边，否则插入到选择的组件的下边
+  // 要获取当前选中的组件(selectedId)
+  const { selectedId, componentList } = draft;
+  const index = componentList.findIndex((c) => c.fe_id === selectedId);
+  // 说明未选中任何组件
+  if (index < 0) {
+    draft.componentList.push(newComponent); //添加到最后一个
+  } else {
+    // 选中组件，插入到index后边
+    draft.componentList.splice(index + 1, 0, newComponent);
+  }
+  draft.selectedId = newComponent.fe_id;
 }

@@ -13,6 +13,7 @@ import {
   changeComponentHidden,
   toggleComponentLocked,
   copySelectedComponent,
+  pasteCopiedComponent,
 } from "../../../store/componentsReducer";
 import {} from "../../../store/componentsReducer";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
@@ -20,7 +21,8 @@ import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
 const EditToolbar: FC = () => {
   const dispatch = useDispatch();
   //获取当前的选中组件的fe_id
-  const { selectedId, selectedComponent } = useGetComponentInfo();
+  const { selectedId, selectedComponent, copiedComponent } =
+    useGetComponentInfo();
   const { isLocked } = selectedComponent || {};
   // 删除组件
   const handleDelete = () => {
@@ -38,6 +40,13 @@ const EditToolbar: FC = () => {
   const copy = () => {
     // 把当前选中的selectedId内的所有内容放到copiedComponent里面
     dispatch(copySelectedComponent());
+  };
+  // 粘贴组件
+  const paste = () => {
+    // 粘贴按钮要判断是否是disabled(就是已经拷贝过之后才能粘贴)
+    if (copiedComponent) {
+      dispatch(pasteCopiedComponent());
+    }
   };
   return (
     <Space>
@@ -78,7 +87,8 @@ const EditToolbar: FC = () => {
         <Button
           shape="circle"
           icon={<BlockOutlined />}
-          // onClick={}
+          onClick={paste}
+          disabled={copiedComponent == null}
         ></Button>
       </Tooltip>
     </Space>

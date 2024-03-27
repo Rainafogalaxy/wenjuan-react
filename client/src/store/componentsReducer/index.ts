@@ -2,8 +2,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "../../components/QuestionComponents";
 import { produce } from "immer";
-import { getNextSelectedId } from "./utils";
+import { getNextSelectedId, insertNewComponent } from "./utils";
 import cloneDeep from "lodash.clonedeep"; //深拷贝
+import { nanoid } from "nanoid";
 export type ComponentInfoType = {
   fe_id: string;
   type: string;
@@ -52,18 +53,7 @@ export const componentsSlice = createSlice({
         action: PayloadAction<ComponentInfoType>
       ) => {
         const newComponent = action.payload;
-        // 如果当前没有选中任何组件，点击添加组件应该添加到最下边，否则插入到选择的组件的下边
-        // 要获取当前选中的组件(selectedId)
-        const { selectedId, componentList } = draft;
-        const index = componentList.findIndex((c) => c.fe_id === selectedId);
-        // 说明未选中任何组件
-        if (index < 0) {
-          draft.componentList.push(newComponent); //添加到最后一个
-        } else {
-          // 选中组件，插入到index后边
-          draft.componentList.splice(index + 1, 0, newComponent);
-        }
-        draft.selectedId = newComponent.fe_id;
+        insertNewComponent(draft, newComponent);
       }
     ),
 
@@ -142,6 +132,15 @@ export const componentsSlice = createSlice({
       if (selectedComponent == null) return; //没选中任何组件
       draft.copiedComponent = cloneDeep(selectedComponent); //这里要深拷贝
     }),
+    // 粘贴复制的组件
+    pasteCopiedComponent: produce((draft: ComponentsStateType) => {
+      const { copiedComponent } = draft;
+      if (copiedComponent == null) return;
+      // 在粘贴时注意：要把一起复制过来的fe_id给修改了，因为它应该是每个组件的唯一标识Id
+      copiedComponent.fe_id = nanoid();
+      // 插入这个复制过来的组件(和上面的新建组件类似,所以把这部分的逻辑单独抽离出来放到utils中了)
+      insertNewComponent(draft, copiedComponent);
+    }),
   },
 });
 export const {
@@ -153,5 +152,6 @@ export const {
   changeComponentHidden,
   toggleComponentLocked,
   copySelectedComponent,
+  pasteCopiedComponent,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;
