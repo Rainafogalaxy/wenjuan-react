@@ -39,6 +39,15 @@ module.exports = [
               isLocked: false,
               props: { title: "你的姓名", placeholder: "请输入姓名..." },
             },
+            // TextArea
+            {
+              fe_id: Random.id(),
+              type: "questionTextarea",
+              title: "多行输入框",
+              isHidden: false,
+              isLocked: false,
+              props: { title: "你的爱好", placeholder: "请输入..." },
+            },
             {
               fe_id: Random.id(),
               type: "questionInput",
