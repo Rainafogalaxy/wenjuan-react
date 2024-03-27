@@ -12,6 +12,15 @@ module.exports = [
           id: Random.id(),
           title: Random.ctitle(),
           componentList: [
+            // Info
+            {
+              fe_id: Random.id(),
+              type: "questionInfo",
+              title: "问卷信息",
+              isHidden: false, //隐藏组件
+              isLocked: false, //锁定组件
+              props: { text: "问卷标题", desc: "问卷描述..." },
+            },
             // Title
             {
               fe_id: Random.id(),
@@ -37,6 +46,15 @@ module.exports = [
               isHidden: false,
               isLocked: false,
               props: { title: "你的电话", placeholder: "请输入电话..." },
+            },
+            // Paragraph
+            {
+              fe_id: Random.id(),
+              type: "questionParagraph",
+              title: "段落",
+              isHidden: false,
+              isLocked: false,
+              props: { title: "一行段落", isCenter: false },
             },
           ],
         },

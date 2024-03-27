@@ -8,6 +8,7 @@ import {
   changeSelectedId,
 } from "../../../store/componentsReducer";
 import { useDispatch } from "react-redux";
+import useBindCanvasKeyPress from "../../../hooks/useBindCanvasKeyPress";
 import classNames from "classnames"; //classnames是一个库，用于方便地动态构建className字符串，可以根据组件的状态或属性来条件性地添加或合并类名，从而简化在JSX中处理css类名的逻辑
 type PropsType = {
   loading: boolean;
@@ -28,6 +29,8 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
     event.stopPropagation(); //阻止冒泡(否则点击此按钮，会冒泡到外侧的main，样式会消失)
     dispatch(changeSelectedId(id));
   };
+  // 绑定快捷键
+  useBindCanvasKeyPress();
   if (loading) {
     return (
       <div style={{ textAlign: "center", marginTop: "24px" }}>

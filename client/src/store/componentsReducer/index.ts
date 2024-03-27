@@ -141,6 +141,26 @@ export const componentsSlice = createSlice({
       // 插入这个复制过来的组件(和上面的新建组件类似,所以把这部分的逻辑单独抽离出来放到utils中了)
       insertNewComponent(draft, copiedComponent);
     }),
+    // 选中上一个组件
+    selectePrevComponent: produce((draft: ComponentsStateType) => {
+      const { selectedId, componentList } = draft;
+      const selectedIndex = componentList.findIndex(
+        (c) => c.fe_id === selectedId
+      );
+      if (selectedIndex < 0) return; //未选中组件
+      if (selectedIndex <= 0) return; //已经选中了第一个，不能继续向上
+      draft.selectedId = componentList[selectedIndex - 1].fe_id;
+    }),
+    // 选中下一个组件
+    selecteNextComponent: produce((draft: ComponentsStateType) => {
+      const { selectedId, componentList } = draft;
+      const selectedIndex = componentList.findIndex(
+        (c) => c.fe_id === selectedId
+      );
+      if (selectedIndex < 0) return; //未选中组件
+      if (selectedIndex + 1 === componentList.length) return;
+      draft.selectedId = componentList[selectedIndex + 1].fe_id;
+    }),
   },
 });
 export const {
@@ -153,5 +173,7 @@ export const {
   toggleComponentLocked,
   copySelectedComponent,
   pasteCopiedComponent,
+  selectePrevComponent,
+  selecteNextComponent,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

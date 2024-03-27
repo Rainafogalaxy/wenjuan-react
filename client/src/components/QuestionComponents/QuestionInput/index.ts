@@ -10,5 +10,5 @@ export default {
   type: "questionInput",
   Component, //画布显示的组件
   PropComponent, //修改属性的组件  (根据selected显示属性组件)
-  defaultProps: QuestionInputDefaultProps,
+  defaultProps: QuestionInputDefaultProps, //默认的属性
 };
