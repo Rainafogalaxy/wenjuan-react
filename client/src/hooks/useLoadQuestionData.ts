@@ -43,7 +43,9 @@ const useLoadQuestionData = () => {
       selectedId = componentList[0].fe_id;
     }
     // 把componentList存到redux中
-    dispatch(resetComponents({ componentList, selectedId }));
+    dispatch(
+      resetComponents({ componentList, selectedId, copiedComponent: null })
+    );
   }, [data]);
 
   // 判断 id 变化，执行ajax加载问卷数据

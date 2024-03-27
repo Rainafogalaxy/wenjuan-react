@@ -15,7 +15,7 @@ const ComponentProp: FC = () => {
   const { selectedComponent } = useGetComponentInfo();
   if (selectedComponent == null) return <NoProp />;
 
-  const { type, props } = selectedComponent; //根据组件类型可以找到组件的配置
+  const { type, props, isLocked, isHidden } = selectedComponent; //根据组件类型可以找到组件的配置
   const componentConfig = getComponentConfigByType(type);
   if (componentConfig == null) return <NoProp />;
   const { PropComponent } = componentConfig;
@@ -24,7 +24,13 @@ const ComponentProp: FC = () => {
     const { fe_id } = selectedComponent;
     dispatch(changeComponentProps({ fe_id, newProps }));
   };
-  return <PropComponent {...props} onChange={changeProps} />;
+  return (
+    <PropComponent
+      {...props}
+      onChange={changeProps}
+      disabled={isLocked || isHidden} //属性面板中，如果组件被锁定了，就禁用表单(禁止编辑)
+    />
+  );
 };
 
 export default ComponentProp;

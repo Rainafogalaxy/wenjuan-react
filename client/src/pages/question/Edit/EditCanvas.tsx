@@ -39,27 +39,32 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
   // 加载finished
   return (
     <div className={style.canvas}>
-      {componentList.map((c) => {
-        const { fe_id } = c;
-        // 拼接class name
-        const wrapperDefaultClassName = style["component-wrapper"]; //默认的样式
-        const selectedClassName = style.selected;
-        const wrapperClassName = classNames({
-          [wrapperDefaultClassName]: true,
-          [selectedClassName]: fe_id === selectedId,
-        });
-        return (
-          <div
-            className={wrapperClassName}
-            key={fe_id}
-            onClick={(e) => {
-              handleClick(e, fe_id);
-            }}
-          >
-            <div className={style.component}>{getComponent(c)}</div>
-          </div>
-        );
-      })}
+      {componentList
+        .filter((c) => !c.isHidden)
+        .map((c) => {
+          const { fe_id, isLocked } = c;
+          // 拼接class name
+          const wrapperDefaultClassName = style["component-wrapper"]; //默认的样式
+          const selectedClassName = style.selected;
+          // 拼接class(锁定组件的css效果)
+          const lockedClassName = style.locked;
+          const wrapperClassName = classNames({
+            [wrapperDefaultClassName]: true,
+            [selectedClassName]: fe_id === selectedId,
+            [lockedClassName]: isLocked,
+          });
+          return (
+            <div
+              className={wrapperClassName}
+              key={fe_id}
+              onClick={(e) => {
+                handleClick(e, fe_id);
+              }}
+            >
+              <div className={style.component}>{getComponent(c)}</div>
+            </div>
+          );
+        })}
     </div>
   );
 };

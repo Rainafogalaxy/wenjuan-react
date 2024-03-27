@@ -3,21 +3,28 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ComponentPropsType } from "../../components/QuestionComponents";
 import { produce } from "immer";
 import { getNextSelectedId } from "./utils";
+import cloneDeep from "lodash.clonedeep"; //深拷贝
 export type ComponentInfoType = {
   fe_id: string;
   type: string;
   title: string;
+  isHidden?: boolean;
+  isLocked?: boolean;
   props: ComponentPropsType;
 };
 
 export type ComponentsStateType = {
   selectedId: string;
   componentList: Array<ComponentInfoType>;
+
+  // 复制粘贴
+  copiedComponent: ComponentInfoType | null; //首先在类型上增加一个copiedComponent(它应该是一个组件类型)，null表示没有复制
 };
 
 const INIT_STATE: ComponentsStateType = {
   selectedId: "", //根据selectedid来判断哪个组件被选中
   componentList: [],
+  copiedComponent: null, //默认初始化时没有复制
 };
 
 export const componentsSlice = createSlice({
@@ -86,6 +93,55 @@ export const componentsSlice = createSlice({
       const index = componentList.findIndex((c) => c.fe_id === removedId);
       componentList.splice(index, 1);
     }),
+    // 隐藏和显示组件
+    changeComponentHidden: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ fe_id: string; isHidden: boolean }>
+      ) => {
+        const { componentList = [] } = draft;
+        const { fe_id, isHidden } = action.payload;
+
+        let newSelectedId = "";
+        if (isHidden) {
+          //隐藏
+          newSelectedId = getNextSelectedId(fe_id, componentList); // 重新计算selectedId
+        } else {
+          // 显示
+          newSelectedId = fe_id;
+        }
+        draft.selectedId = newSelectedId;
+
+        //通过fe_id找到当前要操作的组件
+        const curComp = componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) {
+          curComp.isHidden = isHidden;
+        }
+      }
+    ),
+    // 锁定 / 解锁组件
+    toggleComponentLocked: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ fe_id: string }>
+      ) => {
+        const { fe_id } = action.payload;
+        const { componentList = [] } = draft;
+        const curComp = componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) {
+          curComp.isLocked = !curComp.isLocked;
+        }
+      }
+    ),
+    // 复制当前选中的组件
+    copySelectedComponent: produce((draft: ComponentsStateType) => {
+      const { selectedId, componentList = [] } = draft;
+      const selectedComponent = componentList.find(
+        (c) => c.fe_id === selectedId
+      );
+      if (selectedComponent == null) return; //没选中任何组件
+      draft.copiedComponent = cloneDeep(selectedComponent); //这里要深拷贝
+    }),
   },
 });
 export const {
@@ -94,5 +150,8 @@ export const {
   addComponent,
   changeComponentProps,
   removeSelectedComponent,
+  changeComponentHidden,
+  toggleComponentLocked,
+  copySelectedComponent,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

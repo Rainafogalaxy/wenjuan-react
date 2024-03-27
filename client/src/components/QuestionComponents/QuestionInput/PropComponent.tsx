@@ -3,14 +3,14 @@ import { Input, Form } from "antd";
 import { QuestionInputPropsType } from "./interface";
 
 const PropComponent: FC = (props: QuestionInputPropsType) => {
-  const { title, placeholder, onChange } = props;
+  const { title, placeholder, onChange, disabled } = props;
   const [form] = Form.useForm();
   useEffect(() => {
     form.setFieldsValue({ title, placeholder });
   }, [title, placeholder]);
   const handleValuesChange = () => {
-    if(onChange){
-      onChange(form.getFieldsValue())
+    if (onChange) {
+      onChange(form.getFieldsValue());
     }
   };
   return (
@@ -19,6 +19,7 @@ const PropComponent: FC = (props: QuestionInputPropsType) => {
       initialValues={{ title, placeholder }}
       form={form}
       onValuesChange={handleValuesChange}
+      disabled={disabled}
     >
       <Form.Item
         label="标题"

@@ -22,6 +22,10 @@
   border-color: #1890ff !important; //防止和上方hover冲突
   border-radius: 13px;
 }
+.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .locked {
   opacity: 0.5;
