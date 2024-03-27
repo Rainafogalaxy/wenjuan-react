@@ -81,7 +81,8 @@ export const componentsSlice = createSlice({
     removeSelectedComponent: produce((draft: ComponentsStateType) => {
       const { componentList = [], selectedId: removedId } = draft;
       // 重新计算selectedId
-
+      const newSelectedId = getNextSelectedId(removedId, componentList);
+      draft.selectedId = newSelectedId;
       const index = componentList.findIndex((c) => c.fe_id === removedId);
       componentList.splice(index, 1);
     }),

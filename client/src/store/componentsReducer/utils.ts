@@ -20,6 +20,6 @@ export function getNextSelectedId(
       // 要删除的不是最后一个，删除以后，自动选择下一个
       newSelectedId = componentList[index + 1].fe_id;
     }
-    return newSelectedId;
   }
+  return newSelectedId;
 }
