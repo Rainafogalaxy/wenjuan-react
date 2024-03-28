@@ -161,6 +161,18 @@ export const componentsSlice = createSlice({
       if (selectedIndex + 1 === componentList.length) return;
       draft.selectedId = componentList[selectedIndex + 1].fe_id;
     }),
+    // 修改组件标题
+    changeComponentTitle: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ fe_id: string; title: string }> //fe_id :得知修改哪个组件的标题 title: 要修改的标题是什么
+      ) => {
+        const { fe_id, title } = action.payload;
+        // 根据fe_id找到当前要修改的组件
+        const curComp = draft.componentList.find((c) => c.fe_id === fe_id);
+        if (curComp) curComp.title = title; //如果找到的话
+      }
+    ),
   },
 });
 export const {
@@ -175,5 +187,6 @@ export const {
   pasteCopiedComponent,
   selectePrevComponent,
   selecteNextComponent,
+  changeComponentTitle,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;
