@@ -3,6 +3,7 @@ import { Form, Input, Checkbox, Button, Space } from "antd";
 import { QuestionCheckboxPropsType } from "./interface";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { OptionType } from "./interface";
+import { nanoid } from "nanoid";
 
 const PropsComponent: FC<QuestionCheckboxPropsType> = (
   props: QuestionCheckboxPropsType
@@ -10,7 +11,17 @@ const PropsComponent: FC<QuestionCheckboxPropsType> = (
   const { title, isVertical, list = [], onChange, disabled } = props;
   const [form] = Form.useForm();
   const handleValuesChange = () => {
-    if (!onChange) return;
+    if (onChange == null) return;
+    const newValues = form.getFieldsValue() as QuestionCheckboxPropsType;
+    if (newValues.list) {
+      newValues.list = newValues.list.filter((l) => !(l.text == null));
+    }
+    const { list = [] } = newValues;
+    list.forEach((l) => {
+      if (l.value) return;
+      l.value = nanoid();
+    });
+    onChange(newValues);
   };
   return (
     <Form
@@ -35,6 +46,12 @@ const PropsComponent: FC<QuestionCheckboxPropsType> = (
               {fields.map(({ key, name }, index) => {
                 return (
                   <Space key={key} align="baseline">
+                    {/* 当前选项是否选中 */}
+                    {/* Checkbox没有value属性 */}
+                    <Form.Item name={[name, "checked"]} valuePropName="checked">
+                      <Checkbox />
+                    </Form.Item>
+
                     {/* 当前选项输入框 */}
                     <Form.Item
                       name={[name, "text"]}
@@ -43,11 +60,11 @@ const PropsComponent: FC<QuestionCheckboxPropsType> = (
                         // 不能让多个选项的文字重复
                         {
                           validator: (_, text) => {
-                            const { options = [] } = form.getFieldsValue(); //获取当前form的所有值
+                            const { list = [] } = form.getFieldsValue(); //获取当前form的所有值
                             let num = 0;
                             // console.log(options);
-                            options.forEach((opt: OptionType) => {
-                              if (opt.text === text) num++; //记录text相同的个数。应该只有一个
+                            list.forEach((l: OptionType) => {
+                              if (l.text === text) num++; //记录text相同的个数。应该只有一个
                             });
                             if (num === 1) return Promise.resolve();
                             return Promise.reject(new Error("与其他选项重复"));
