@@ -380,10 +380,10 @@ centent-box只计算内容大小
 25.webSocket的心跳检测与重连机制？
 26.编写一个executeTasks函数，它接受一个异步任务数组作为参数，每个任务是一个会返回Promise的函数，目的是同时启动这些异步任务，并且在每个任务完成时，
 立即按照它们在数组中的原始顺序显示它们的结果？
- const executeTasks = () =>{
 
- }
-
+const executeTasks = (tasks)=>{
+  
+}
 
 
 
