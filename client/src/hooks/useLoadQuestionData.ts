@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { resetComponents } from "../store/componentsReducer";
 import { useRequest } from "ahooks";
 import { useEffect } from "react";
+import { resetPageInfo } from "../store/PageInfoReducer";
 const useLoadQuestionData = () => {
   const { id = "" } = useParams(); //从哪个组件引用它，就会从哪个组件中获取到params中的id
   const dispatch = useDispatch();
@@ -36,7 +37,13 @@ const useLoadQuestionData = () => {
   // 根据获取的data，设置redux store
   useEffect(() => {
     if (!data) return;
-    const { title = "", componentList = [] } = data;
+    const {
+      title = "",
+      componentList = [],
+      desc = "",
+      js = "",
+      css = "",
+    } = data;
     // 获取默认的selectedId
     let selectedId = ""; //默认选中第一个
     if (componentList.length > 0) {
@@ -46,6 +53,8 @@ const useLoadQuestionData = () => {
     dispatch(
       resetComponents({ componentList, selectedId, copiedComponent: null })
     );
+    // 把pageInfo放到redux中
+    dispatch(resetPageInfo({ title, desc, js, css }));
   }, [data]);
 
   // 判断 id 变化，执行ajax加载问卷数据

@@ -373,7 +373,14 @@ centent-box只计算内容大小
 18.vue和react分别是怎么解决样式污染的？
 19.TS中的any 和unknown区别？
 20.react的useState定义的状态如何确保能拿到最新的值？
+——————————————————————————————————————————————————————————————————————————————————————
 21.flex：1 的含义？
+答：首先，flex属性时flex-grow,flex-shrink,flex-basis的简写，默认值为0 1 auto
+
+flex-grow：元素在 flex 容器中分配剩余空间的相对比例
+flex-shrink：指定了 flex 元素的收缩规则
+flex-basis：指定了 flex 元素在主轴方向上的初始大小
+——————————————————————————————————————————————————————————————————————————————————————
 22.vue-router两种路由实现方式？
 23.React中父组件如何调用子组件的方法？
 24.如何定义组件的状态信息(useState()),如果在某个方法中调用了setState改变状态，setState中能获取到最新的值吗？
@@ -381,9 +388,30 @@ centent-box只计算内容大小
 26.编写一个executeTasks函数，它接受一个异步任务数组作为参数，每个任务是一个会返回Promise的函数，目的是同时启动这些异步任务，并且在每个任务完成时，
 立即按照它们在数组中的原始顺序显示它们的结果？
 
+// Promise.all可以同时启动多个异步任务  map可以确保它们按照原始的顺序执行
+// 但是：Promise.all实在所有任务都完成之后才会返回，所以可以使用Promise.allsettled(或为每个任务单独处理)
+
+Promise.all与Promise.allSettled的区别：
+1.当传递给Promise.all的所有promise都成功解决(fullfilled)时,它返回一个promise，这个promise是一个包含所有promise返回的值的数组，如果传递给promise.all的任意一个promise失败，它就会立即返回reject
+2.不管传递给Promise.allSettled的Promise是reject还是resolve，它都会等待所有的promise都完成，返回一个数组，数组里是对象
+
 const executeTasks = (tasks)=>{
-  
+  const promise = tasks.map( task => task());
+  promise.allSettled(promise).then(results=>{
+    results.forEach((result,index)=>{
+      console.log(result);
+    })
+  })
 }
+
+TS泛型：
+指的是在定义函数，接口或类时不具体指定的数据类型，而是在使用时指定类型。
+基本用法：
+function identify<T>(arg:T):T{  //identify函数接受任何类型T的参数arg，并直接返回这个参数，返回的类型也是类型T
+  return arg;
+}
+
+TS接口(interface):用于定义对象结构，接口可以定义一个规范，对象必须遵循这个规范，这些规范可以包括属性的存在，类型，以及方法的签名
 
 
 
