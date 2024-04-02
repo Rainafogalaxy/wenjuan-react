@@ -25,9 +25,15 @@ const pageInfoSlice = createSlice({
     ) => {
       return action.payload;
     },
+    // 修改标题
+    changePageTitle: produce(
+      (draft: PageInfoType, action: PayloadAction<string>) => {
+        draft.title = action.payload;
+      }
+    ),
   },
 });
 
-export const { resetPageInfo } = pageInfoSlice.actions;
+export const { resetPageInfo, changePageTitle } = pageInfoSlice.actions;
 
 export default pageInfoSlice.reducer;
