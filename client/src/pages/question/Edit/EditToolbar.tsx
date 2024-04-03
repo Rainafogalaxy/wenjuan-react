@@ -6,6 +6,8 @@ import {
   LockOutlined,
   CopyOutlined,
   BlockOutlined,
+  UpOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import {
@@ -14,6 +16,7 @@ import {
   toggleComponentLocked,
   copySelectedComponent,
   pasteCopiedComponent,
+  moveComponent,
 } from "../../../store/componentsReducer";
 import {} from "../../../store/componentsReducer";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
@@ -21,9 +24,15 @@ import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
 const EditToolbar: FC = () => {
   const dispatch = useDispatch();
   //获取当前的选中组件的fe_id
-  const { selectedId, selectedComponent, copiedComponent } =
+  const { selectedId, selectedComponent, copiedComponent, componentList } =
     useGetComponentInfo();
   const { isLocked } = selectedComponent || {};
+
+  const length = componentList.length;
+  const selectedIndex = componentList.findIndex((c) => c.fe_id === selectedId);
+  const isFirst = selectedIndex <= 0; //当前选中的组件是第一个
+  const isLast = selectedIndex + 1 >= length; //当前选中的组件是最后一个
+
   // 删除组件
   const handleDelete = () => {
     dispatch(removeSelectedComponent());
@@ -48,7 +57,21 @@ const EditToolbar: FC = () => {
       dispatch(pasteCopiedComponent());
     }
   };
-  // 上移 下移 撤销 重做
+  // 上移
+  const moveUp = () => {
+    if (isFirst) return; //如果当前选中的已经是第一个，返回
+    dispatch(
+      moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex - 1 })
+    );
+  };
+  // 下移
+  const moveDown = () => {
+    if (isLast) return; //如果当前选中的已经是最后一个，返回
+    dispatch(
+      moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex + 1 })
+    );
+  };
+
   return (
     <Space>
       <Tooltip title="删除">
@@ -90,6 +113,26 @@ const EditToolbar: FC = () => {
           icon={<BlockOutlined />}
           onClick={paste}
           disabled={copiedComponent == null}
+        ></Button>
+      </Tooltip>
+
+      {/* 上移 */}
+      <Tooltip title="上移">
+        <Button
+          shape="circle"
+          icon={<UpOutlined />}
+          onClick={moveUp}
+          disabled={isFirst}
+        ></Button>
+      </Tooltip>
+
+      {/* 下移 */}
+      <Tooltip title="下移">
+        <Button
+          shape="circle"
+          icon={<DownOutlined />}
+          onClick={moveDown}
+          disabled={isLast}
         ></Button>
       </Tooltip>
     </Space>

@@ -6,9 +6,12 @@ import { getComponentConfigByType } from "../../../components/QuestionComponents
 import {
   ComponentInfoType,
   changeSelectedId,
+  moveComponent,
 } from "../../../store/componentsReducer";
 import { useDispatch } from "react-redux";
 import useBindCanvasKeyPress from "../../../hooks/useBindCanvasKeyPress";
+import SortableContainer from "../../../components/DragSortable/SortableContainer";
+import SortableItem from "../../../components/DragSortable/SortableItem";
 import classNames from "classnames"; //classnames是一个库，用于方便地动态构建className字符串，可以根据组件的状态或属性来条件性地添加或合并类名，从而简化在JSX中处理css类名的逻辑
 type PropsType = {
   loading: boolean;
@@ -39,36 +42,47 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
       </div>
     );
   }
+  // SortableContainer组件的items属性需要每个item都有一个id
+  const componentListWidthId = componentList.map((c) => {
+    return { ...c, id: c.fe_id };
+  });
+  // 拖拽排序结束时的函数
+  const handleDragEnd = (oldIndex: number, newIndex: number) => {
+    dispatch(moveComponent({ oldIndex, newIndex }));
+  };
   // 加载finished
   return (
-    <div className={style.canvas}>
-      {componentList
-        .filter((c) => !c.isHidden)
-        .map((c) => {
-          const { fe_id, isLocked } = c;
-          // 拼接class name
-          const wrapperDefaultClassName = style["component-wrapper"]; //默认的样式
-          const selectedClassName = style.selected;
-          // 拼接class(锁定组件的css效果)
-          const lockedClassName = style.locked;
-          const wrapperClassName = classNames({
-            [wrapperDefaultClassName]: true,
-            [selectedClassName]: fe_id === selectedId,
-            [lockedClassName]: isLocked,
-          });
-          return (
-            <div
-              className={wrapperClassName}
-              key={fe_id}
-              onClick={(e) => {
-                handleClick(e, fe_id);
-              }}
-            >
-              <div className={style.component}>{getComponent(c)}</div>
-            </div>
-          );
-        })}
-    </div>
+    <SortableContainer items={componentListWidthId} onDragEnd={handleDragEnd}>
+      <div className={style.canvas}>
+        {componentList
+          .filter((c) => !c.isHidden)
+          .map((c) => {
+            const { fe_id, isLocked } = c;
+            // 拼接class name
+            const wrapperDefaultClassName = style["component-wrapper"]; //默认的样式
+            const selectedClassName = style.selected;
+            // 拼接class(锁定组件的css效果)
+            const lockedClassName = style.locked;
+            const wrapperClassName = classNames({
+              [wrapperDefaultClassName]: true,
+              [selectedClassName]: fe_id === selectedId,
+              [lockedClassName]: isLocked,
+            });
+            return (
+              <SortableItem key={fe_id} id={fe_id}>
+                <div
+                  className={wrapperClassName}
+                  onClick={(e) => {
+                    handleClick(e, fe_id);
+                  }}
+                >
+                  <div className={style.component}>{getComponent(c)}</div>
+                </div>
+              </SortableItem>
+            );
+          })}
+      </div>
+    </SortableContainer>
   );
 };
 
