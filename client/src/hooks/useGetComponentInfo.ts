@@ -4,7 +4,7 @@ import { StateType } from "../store";
 import { ComponentsStateType } from "../store/componentsReducer";
 const useGetComponentInfo = () => {
   const components = useSelector<StateType>(
-    (state) => state.components
+    (state) => state.components.present //获取数据
   ) as ComponentsStateType;
   const { componentList = [], selectedId, copiedComponent } = components;
   const selectedComponent = componentList.find((c) => c.fe_id === selectedId);

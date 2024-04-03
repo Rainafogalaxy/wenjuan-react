@@ -28,7 +28,7 @@ const PropComponent: FC = (props: QuestionInputPropsType) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item label="Placeholder" name={placeholder}>
+      <Form.Item label="Placeholder" name="placeholder">
         <Input />
       </Form.Item>
     </Form>

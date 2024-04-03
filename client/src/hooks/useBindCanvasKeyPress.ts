@@ -8,6 +8,7 @@ import {
   selecteNextComponent,
   selectePrevComponent,
 } from "../store/componentsReducer";
+import { ActionCreators as UndoActionCreators } from "redux-undo";
 
 const isActiveElementValid = () => {
   const activeElm = document.activeElement;
@@ -50,7 +51,22 @@ const useBindCanvasKeyPress = () => {
     if (!isActiveElementValid) return;
     dispatch(selecteNextComponent());
   });
-  //快捷键: 撤销  重做
+  //快捷键: 撤销
+  useKeyPress(
+    ["ctrl.z", "meta.z"],
+    () => {
+      if (!isActiveElementValid) return;
+      dispatch(UndoActionCreators.undo());
+    },
+    {
+      exactMatch: true, //严格匹配(只按下ctrl + z才会触发，否则只要按下的键中带有以上的值就会触发)
+    }
+  );
+  //快捷键: 重做
+  useKeyPress(["ctrl.shift.z", "meta.shift.z"], () => {
+    if (!isActiveElementValid) return;
+    dispatch(UndoActionCreators.redo());
+  });
 };
 
 export default useBindCanvasKeyPress;
