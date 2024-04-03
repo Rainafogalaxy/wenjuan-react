@@ -14,6 +14,7 @@ module.exports = [
           desc: "some descriptions",
           js: "",
           css: "",
+          isPublished: true, //是否发布
           componentList: [
             // Info
             {

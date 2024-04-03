@@ -9,9 +9,10 @@
 module.exports = {
   // devServer是webpack中的一个配置 : 开发环境下的server
   devServer: {
+    port: 8000, // B 端(前端)
     //当只要命中了以api开头的路由...,都指向所指定的属性值
     proxy: {
-      "/api": "http://localhost:3001",
+      "/api": "http://localhost:3001", //mock 服务
     },
   },
 };

@@ -43,6 +43,7 @@ const useLoadQuestionData = () => {
       desc = "",
       js = "",
       css = "",
+      isPublished = "false",
     } = data;
     // 获取默认的selectedId
     let selectedId = ""; //默认选中第一个
@@ -54,7 +55,7 @@ const useLoadQuestionData = () => {
       resetComponents({ componentList, selectedId, copiedComponent: null })
     );
     // 把pageInfo放到redux中
-    dispatch(resetPageInfo({ title, desc, js, css }));
+    dispatch(resetPageInfo({ title, desc, js, css, isPublished }));
   }, [data]);
 
   // 判断 id 变化，执行ajax加载问卷数据
