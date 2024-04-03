@@ -5,6 +5,7 @@ import { produce } from "immer";
 import { getNextSelectedId, insertNewComponent } from "./utils";
 import cloneDeep from "lodash.clonedeep"; //深拷贝
 import { nanoid } from "nanoid";
+import { arrayMove } from "@dnd-kit/sortable";
 export type ComponentInfoType = {
   fe_id: string;
   type: string;
@@ -173,6 +174,18 @@ export const componentsSlice = createSlice({
         if (curComp) curComp.title = title; //如果找到的话
       }
     ),
+    // 拖拽，移动组件的位置(根据newIndex和oldIndex)
+    moveComponent: produce(
+      (
+        draft: ComponentsStateType,
+        action: PayloadAction<{ oldIndex: number; newIndex: number }>
+      ) => {
+        //
+        const { componentList: curComponentList } = draft;
+        const { oldIndex, newIndex } = action.payload;
+        draft.componentList = arrayMove(curComponentList, oldIndex, newIndex);
+      }
+    ),
   },
 });
 export const {
@@ -188,5 +201,6 @@ export const {
   selectePrevComponent,
   selecteNextComponent,
   changeComponentTitle,
+  moveComponent,
 } = componentsSlice.actions;
 export default componentsSlice.reducer;
