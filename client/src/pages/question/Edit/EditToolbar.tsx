@@ -20,6 +20,7 @@ import {
 } from "../../../store/componentsReducer";
 import {} from "../../../store/componentsReducer";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
+import { log } from "console";
 
 const EditToolbar: FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,8 @@ const EditToolbar: FC = () => {
   const length = componentList.length;
   const selectedIndex = componentList.findIndex((c) => c.fe_id === selectedId);
   const isFirst = selectedIndex <= 0; //当前选中的组件是第一个
-  const isLast = selectedIndex + 1 >= length; //当前选中的组件是最后一个
+
+  const isLast = selectedIndex + 1 >= length || selectedId == ""; //当前选中的组件是最后一个(或未选中时)
 
   // 删除组件
   const handleDelete = () => {

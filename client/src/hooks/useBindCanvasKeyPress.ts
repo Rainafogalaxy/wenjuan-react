@@ -11,7 +11,14 @@ import {
 
 const isActiveElementValid = () => {
   const activeElm = document.activeElement;
-  if (activeElm === document.body) return true; //说明光标没有focus到input上边
+  // 没有增加dndkit之前(因为使用它会自动把每个组件包裹上一层div盒子)
+  // if (activeElm === document.body) return true; //说明光标没有focus到input上边
+  if (activeElm === document.body) return true;
+  if (activeElm?.matches("div[role='button']")) return true;
+  // let result = element.matches(selectorString);
+  // 如果元素被指定的选择器字符串选择，Element.matches() 方法返回 true; 否则返回 false。
+  // result 的值为 true 或 false.
+  // selectorString 是个 css 选择器字符串。
   return false;
 };
 
