@@ -440,7 +440,7 @@ TS接口(interface):用于定义对象结构，接口可以定义一个规范，
    ----> 比如：www.dks.com 和 app.example.com
    2.父域和子域之间
    ---->子域可以设置自己的Cookie，但父域不能访问子域设置的Cookie，除非子域在设置Cookie时，明确指定了父域为Cookie的域名
-
+  .....
 
 
 
