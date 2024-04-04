@@ -14,7 +14,7 @@ const INIT_STATE: PageInfoType = {
   desc: "",
   js: "",
   css: "",
-  isPublished: false,
+  // isPublished  没有默认值就是undefined
 };
 
 const pageInfoSlice = createSlice({

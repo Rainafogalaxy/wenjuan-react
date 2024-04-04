@@ -4,6 +4,7 @@ import style from "./index.module.scss";
 import EditCanvas from "./EditCanvas";
 import { useDispatch } from "react-redux";
 import { changeSelectedId } from "../../../store/componentsReducer";
+import useGetPageInfo from "../../../hooks/useGetPageInfo";
 import { useTitle } from "ahooks";
 import LeftPanel from "./LeftPanel";
 import RightPanel from "./RightPanel";
@@ -11,6 +12,8 @@ import EditHeader from "./EditHeader";
 const Edit: FC = () => {
   // 此页面是问卷编辑页面
   const dispatch = useDispatch();
+  const { title } = useGetPageInfo();
+  useTitle(`问卷编辑 - ${title}`);
   const clearSelectedId = () => {
     dispatch(changeSelectedId(""));
   };
