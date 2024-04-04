@@ -4,6 +4,7 @@ import style from "./index.module.scss";
 import useLoadQuestionData from "../../../hooks/useLoadQuestionData";
 import useGetPageInfo from "../../../hooks/useGetPageInfo";
 import ComponentList from "./ComponentList";
+import PageStat from "./PageStat";
 import StatHeader from "./StatHeader";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "ahooks";
@@ -55,7 +56,13 @@ const Stat: FC = () => {
             setSelectedComponentType={setSelectedComponentType}
           />
         </div>
-        <div className={style.main}>mid</div>
+        <div className={style.main}>
+          <PageStat
+            selectedComponentId={selectdComponentId}
+            setSelectedComponentId={setSelectedComponentId}
+            setSelectedComponentType={setSelectedComponentType}
+          />
+        </div>
         <div className={style.right}>right</div>
       </>
     );
