@@ -33,10 +33,12 @@ const Trash: FC = () => {
   useTitle("Star - 回收站");
   // 记录选中的id
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  // 定义表格的列
   const tableColumns = [
     {
       title: "标题",
       dataIndex: "title",
+      // key可以不写，因为它会默认取dataIndex的值
     },
     {
       title: "是否发布",
