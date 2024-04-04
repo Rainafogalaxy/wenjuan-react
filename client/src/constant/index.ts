@@ -5,4 +5,13 @@ export const LIST_PAGE_SIZE_PARAM_KEY = "pageSize";
 
 export const LIST_PAGE_SIZE = 10;
 
-export const STAT_PAGE_SIZE = 10;  //统计页
+export const STAT_PAGE_SIZE = 10; //统计页
+
+export const STAT_COLORS = [
+  "#9370DB",
+  "#FFC1E0",
+  "#97CBFF",
+  "#FF8F59",
+  "#93FF93",
+  "#FFD1A4",
+];

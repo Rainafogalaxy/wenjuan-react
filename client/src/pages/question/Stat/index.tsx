@@ -8,6 +8,7 @@ import PageStat from "./PageStat";
 import StatHeader from "./StatHeader";
 import { useNavigate } from "react-router-dom";
 import { useTitle } from "ahooks";
+import CharStat from "./ChartStat";
 const Stat: FC = () => {
   const { loading } = useLoadQuestionData();
   const { title, isPublished } = useGetPageInfo();
@@ -63,7 +64,12 @@ const Stat: FC = () => {
             setSelectedComponentType={setSelectedComponentType}
           />
         </div>
-        <div className={style.right}>right</div>
+        <div className={style.right}>
+          <CharStat
+            selectedComponentId={selectdComponentId}
+            selectedComponentType={selectedComponentType}
+          />
+        </div>
       </>
     );
   };
