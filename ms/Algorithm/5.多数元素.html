@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      var majorityElement = function (nums) {
+        debugger;
+        let c = 0;
+        let res = 0;
+        const m = new Map();
+        for (let i = 0; i < nums.length; i++) {
+          if (!m.has(nums[i])) {
+            m.set(nums[i], 1);
+          } else {
+            m.set(nums[i], m.get(nums[i]) + 1);
+          }
+          if (m.get(nums[i]) > c) {
+            c = m.get(nums[i]);
+            res = nums[i];
+          }
+        }
+        return res;
+      };
+      console.log(majorityElement([6, 5, 5]));
+    </script>
+  </head>
+  <body></body>
+</html>

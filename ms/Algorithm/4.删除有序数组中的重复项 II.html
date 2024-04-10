@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      var removeDuplicates = function (nums) {
+        let left = 0;
+        let right = 1;
+        while (right <= nums.length) {
+          if (nums[left] === nums[right]) {
+            if (right - left > 1) {
+              nums.splice(right, 1);
+            } else right++;
+          } else {
+            left++;
+            right++;
+          }
+        }
+        return nums.length;
+      };
+    </script>
+  </head>
+  <body></body>
+</html>

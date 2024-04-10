@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      var rotate = function (nums, k) {
+        const n = nums.length;
+        const newArr = new Array(n);
+        for (let i = 0; i < n; ++i) {
+          newArr[(i + k) % n] = nums[i];
+          // 将原数组nums中的元素向右轮转k个位置，这一行的核心逻辑是计算每个元素轮转后的新位置
+          //取模是为了考虑到如果i+k大于数组的长度，就需要将其"回绕"到数组的开始，这通过对n取模来实现，确保新的索引不会超出数组的界限
+        }
+        for (let i = 0; i < n; ++i) {
+          nums[i] = newArr[i];
+        //   将计算好的新数组newArr的内容复制回数组nums
+        }
+      };
+    </script>
+  </head>
+  <body></body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      var removeElement = function (nums, val) {
+        let p = nums.length - 1;
+        if (nums.findIndex((i) => i === val) < 0) return nums.length;
+        while (p >= 0) {
+          if (nums[nums.length - 1] === val) {
+            nums.pop();
+          } else {
+            nums.unshift(nums.pop());
+          }
+          p--;
+        }
+        return nums.length;
+      };
+      console.log(removeElement([0, 1, 2, 2, 3, 0, 4, 2], 2));
+    </script>
+  </head>
+  <body></body>
+</html>
