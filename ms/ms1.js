@@ -1,4 +1,5 @@
 /* 
+https://github.com/cosen1024/Java-Interview/blob/main/%E9%9B%B6%E5%9F%BA%E7%A1%80Java%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.md
 1.魔法参数
 **是指在编程中直接使用的，没有明确含义的硬编码数值**
 魔法参数会使代码难以阅读和理解：
