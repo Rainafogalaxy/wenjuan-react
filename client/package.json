@@ -64,6 +64,7 @@
   "devDependencies": {
     "@craco/craco": "^7.1.0",
     "@types/lodash.clonedeep": "^4.5.9",
-    "@types/mockjs": "^1.0.10"
+    "@types/mockjs": "^1.0.10",
+    "jest": "^27.5.1"
   }
 }
