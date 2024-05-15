@@ -230,7 +230,7 @@ Vue3使用proxy，它的优点是可以直接拦截整个对象(在不需要递�
 (tip:副作用函数指的是一个执行会直接或间接影响其他函数执行的函数)
 ---------->Reflect:
               -->Reflect是一个内置对象，它提供拦截 JavaScript 操作的方法(出自MDN)，Reflect提供的方法与Proxy的方法相对应，它让Object操作都变成函数行为
-              Reflect.get(target,propertyKey,[receiver])  第一个参数是目标对象 ; 第二个参数是要获取的属性名称 ; 
+              Reflect.get(target,propertyKey,[receiver])  第一个参数是目标对象 ; 第二个参数 是要获取的属性名称 ; 
               第三个是可选参数，如果目标属性是一个getter函数，那么receiver会作为getter调用时的this值
               Reflect.set()同理...
  
