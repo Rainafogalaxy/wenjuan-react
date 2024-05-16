@@ -102,14 +102,46 @@
 10.前端的网络安全可以怎么维护？
   https://getemoji.com/
 11.怎么防范中间人攻击？
+ 中间人攻击：是一种网络安全威胁，攻击者秘密拦截，发送或修改通信双方之间的通信，以窃取信息，欺骗双方或破坏数据;
+ 常见攻击形式：
+             1. HTTP劫持：在用户和网站之间插入，未加密的HTTP链接被攻击者用于注入恶意内容或重定向到假冒网站
+             2. DNS欺骗：篡改DNS响应将用户重定向到恶意网站
+             3. SSL剥离：攻击者强迫用户端使用非加密连接【尽管客户端和服务器原本都支持加密连接】
+             4. WIFI电子侦听
+             5. Email劫持：拦截电子邮件信息
 12.Vue的组件间通信有几种方式？
+  1. props / Events
+  2. Provide / Inject
+  3. vuex
+  4. teleport 【<Teleport> 是一个内置组件，它可以将一个组件内部的一部分模板“传送”到该组件的 DOM 结构外层的位置去。 】
+  5. pinia
+  6. eventbus
 13.如何收集项目中的各种数据指标，以用于优化项目？
 14.有哪些衡量网页性能的指标和方法？
-15. pinia和vuex有啥区别？
+15.pinia和vuex有啥区别？
 16.关于nextTick？
 17.数组的方法有哪些？
 18.CSRF攻击，XSS攻击，用来防御的常见场景？
 19.怎么获取浏览器的信息？
+  navigator对象，它提供了关于浏览器的信息(浏览器版本，用户代理字符串User-Agent)
+  const userAgent = navigator.userAgent;(包含浏览器类型，版本和所在的操作系统等信息)
+  const platform = navigator.platform;(用户的操作系统)
+  ---> 使用Modernizr：
+                    是一个js库，可以检查用户逇浏览器是否支持某些CSS3特性。HTML5 API等
+                    引入后：
+                          if(Modernizr.flexbox){
+                            //支持flexbox
+                          }else{
+                            //支持flexbox
+                          }
+  ---> 使用UAParser.js:
+                      import UAParser from 'ua-parser-js';
+                      const parser = new UAParser();
+                      const result = parser.getResult();
+                      console.log(result.browser);  //浏览器信息
+                      console.log(result.device);  //设备信息
+                      console.log(result.os); //操作系统信息
+    tip：用户代理字符串是可以被修改的，所以某些情况下并不安全
 20.MVVM是什么？
 21.rem和em ，vw和vh
 22.同源策略？
@@ -118,11 +150,39 @@
 25.关于响应状态码
 26.事件循环？
 27.Jquery和Vue的区别？
+  Jquery本质是只是让在js中操作dom，事件处理，选择元素的方式比原生更简单一些，方便写代码；
+  而vue是一个js框架，它的核心是MVVM模型，vue提供了一套完整的用于开发页面的(特别是单页面应用的工具)，比如路由管理，组件系统。模板语法，内置指令和内置组件等；
+  它对于页面的DOM元素的处理，采用虚拟DOM的比对方式，通过快速Diff算法，对要发生变化的dom元素进行相应的排序和变更，在更新视图的变化，一定程度上减少了DOM操作对页面性能的开销；
 28.promise.all和promise.race的区别？
 29.可不可以让promise的状态不管成功还是失败都并行结束？
-30.splice和slice有什么区别？
 
-  
-  
- 
-  **/
+30.splice和slice有什么区别？
+  splice是原地删除或添加数组中的元素，slice会返回一个由参数起始索引(start)和结束索引(end)决定的原数组的浅拷贝
+
+31. 在package.json文件中，dependencies和devDependencies有什么区别？
+   -->dependencies 列出了项目在生产环境中运行所需要的依赖，比如说如果项目使用Vue框架开发，那么vue就应该在这里
+   -->devDependencies 列出了只在开发环境中需要的依赖包，这些依赖主要用于开发过程(在生产环境中不是必须的，比如说单元测试，代码格式化工具eslint等，都应该在这里)
+     区分这两者可以：
+               1.优化生产环境，只将必要的包部署到生产环境，可以减小生产环境的大小，优化应用的加载时间和性能；
+               2.安全性：减少生产环境的大小，优化应用的加载时间和性能；
+     使用npm或yarn时：
+                    1. 安装生产依赖：npm i package-name --save  【从npm 5 开始默认就是将依赖添加到dependencies，所以--save也可以省略】  yarn add package-name
+                    2. 安装开发依赖: npm i package-name --save-dev 【会添加到devDependencies】 yarn add package-name --dev
+32. Vite的依赖预构建？(主要是为了项目中的第三方库，因为这些第三方包并不一定是ES模块格式，而且有些包的数量很多，直接加载会影响性能(因为会发起很多网络请求))
+   1.当第一次运行Vite时，vite首先会检查项目中的package.json文件，找出项目中应用的所有依赖
+   2.vite会预构建(预打包)这些依赖到node_modules/.vite目录中，(esbuild)
+   3.预构建的结果会被缓存下来
+      -->优点：1.开发环境下，可以快速启动服务器
+              2.减少请求，将多个依赖合并到少数几个ESM包中，减少了浏览器在模块开发过程中需要处理的请求数量
+              3.确保不是以ES模块格式提供的依赖，也可以在现代浏览器中运行
+33.
+
+
+
+
+
+
+
+
+
+**/
