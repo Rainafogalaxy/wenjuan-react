@@ -339,6 +339,9 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
                          使用内容安全策略(CSP)
                          定期清理数据库
                          ...
+      --> CSRF(Cross-Site Request Forgery),跨站请求伪造：
+               -->攻击者诱导用户点进第三方网站，然后此网站中只要一被打开就会执行一些脚本，携带着用户的token和各种信息凭证，
+                  向被攻击的网站发送请求，(因为用户在此网站已经注册并登录了，会绕过后台的验证)
       --> CSP (Content Security Policy)是一种安全标准，用于防止跨站脚本攻击和其他跨站注入攻击。
           --> CSP指定哪些内容可以(脚本，图片，css等)可以在网页上执行或加载，提供了一个额外的安全层。
               --> 配置CSP：
