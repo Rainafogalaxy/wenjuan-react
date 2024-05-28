@@ -476,8 +476,15 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
 76：webpack对项目做了哪些优化(可以做哪些优化？)
 77：js中"="与浅拷贝有区别吗？
 78：webpack的常用插件？
+   
 79：实习主要做了什么？遇到困难如何解决的？
 80：数组去重的方法？
+   答：1.Set数据结构 + Array.from()
+       2.双重for循环 + splice(去除)
+       3.forEach() + inCludes()
+       4.forEach() + indexOf()
+       5.filter() + indexOf()
+       ...
 81：CSS三栏布局实现的方案？
 82：登录常见的实现方案？(什么问题？)
 83：如何在项目中判断用户是否登录？
@@ -489,7 +496,7 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
 89：算法：冒泡排序
 90：算法：排序链表
 91：使用JSON.Stringify进行深拷贝的缺点？
-92：怪异盒子的padding发生改变，页面会不会发生改变？(不会)
+92：怪异盒子的padding发生改变，页面会不会发生改变？(不会改变)
 93：通过link引入的样式和通过import引入的样式有什么区别？
 94：跨域是怎么产生的？怎么解决跨域？(浏览器的同源策略)
 95：vue缓存组件和数据的方式？
