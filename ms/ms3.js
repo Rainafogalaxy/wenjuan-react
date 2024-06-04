@@ -397,7 +397,18 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
 55.不知道盒子的宽高情况下，怎样让元素垂直居中？
 56.transform的属性？
 57.v-if与v-show的区别？
+   --> v-show控制的元素改变的是css的display属性，控制隐藏与显示(display: none),v-if是控制元素是否真正存在页面的dom结构中
 58：显示和隐藏元素的方法，和它们之间的区别？
+   -->引起重绘重排：
+               1.overflow: hidden/none;
+               2.display: none;
+               3.position: absolute绝对定位，将元素移出可视区域
+   -->不会引起重绘重排：
+               1.opacity: 0; 将透明度设置为0(占位)
+               2.visibility：hidden(占位)
+               3.transform: scale(0) (占位)
+               4.transform: translate(-999px,0) (占位)
+               5.clip-path:circle(0) (占位，创建一个裁剪区域，确定元素的哪些部分可见)
 59：z-index有什么限制？
 60：说一下重绘重排？
 61：移动端横竖屏切换方案？
