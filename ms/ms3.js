@@ -47,8 +47,8 @@
 3.React的生命周期？
   在useEffect()函数可以看作是componentDidMount，componentDidUpdate，componentWillUnmount的集合，
   useEffect接受两个参数，一个是执行函数，一个是依赖项数组；
-  --> 1. 不写依赖项数组： useEffect(()=>{}) -->副作用函数会在组件每次渲染后运行
-      2. 空依赖数组：useEffect(()=>{},[]) -->副作用函数只会在组件挂载时执行一次 (componentDidMount)
+  --> 1. 不写依赖项数组： useEffect(()=>{}) -->副作用函数会在组件每次渲染后运行，每次更新时都会触发
+      2. 空依赖数组：useEffect(()=>{},[]) -->副作用函数只会在组件挂载时执行一次 ，之后的组件更新不会触发(componentDidMount)
       3. 包含依赖项的数组:当数组中包含一个或多个依赖时，只有当依赖项改变时，副作用函数才会执行(componentDidUpdate)
       4. 清理函数：useEffect的副作用函数可以返回一个清理函数(return)，这个清理函会在组件卸载前执行，或者在依赖项改变用且副作用重新执行前执行【可用于执行如取消网络。定时器或取消订阅等清理任务】
          --> useEffect(()=>{
