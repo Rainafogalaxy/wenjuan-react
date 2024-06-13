@@ -1,0 +1,106 @@
+<!--
+1.关系型数据库MySql(一对一，一对多，多对多等关系)，一般效率会比较低一点【存在硬盘文件中】
+  非关系数据库存在内存中，效率高；
+  DQL 数据查询语言【select】
+
+  DML 数据操纵语言(对表中的数据进行插入，删除等操作)
+
+DQL：
+2.简单查询
+  SELECT  字段名 FROM 表名 ;  //这里的字段名可以写多个
+  SELECT * FROM 表名;  // 查询所有(效率低，可读性差，实际程序中最好不使用)
+   tip: 字段可以参加数学运算
+
+  别名：SELECT 字段名 AS 别名 FROM 表名; tip: AS 可以省略，且如果别名中带空格必须要加个(单)引号，否则编译会有错误
+
+3.条件查询
+  SELECT 字段名 FROM 表名 WHERE ______ ; ____中可以是表达式(比如说字段名='Kyungsoo') 【mysql中不区分大小写】
+  模糊查询：
+          SELECT .. FROM .. WHERE 字段 LIKE '通配符表达式';
+  排序：
+      SELECT .. from .. ORDER BY 字段 ASC/DESC; (默认升序asc)
+  tip: order by 在where后边
+
+4.去重 distinct 【只能出现在所有查询语句的最前方】
+  SELECT distinct 字段 FROM 表名;
+
+5.聚合函数
+(作用于某一列数据)
+  SELECT 聚合函数 FROM 表名;
+   聚合函数：(常见)
+          count() 统计数量
+          max()
+          min()
+          avg() 平均值
+          sum() 求和
+          tip:null不参与计算
+                                                   根据哪个字段进行分组
+6.分组查询                                          ↑
+  SELECT 字段列表 FROM 表名 WHERE ____ GROUP BY 分组字段名 [HAVING 分组后过滤条件]
+  tip：WHERE是分组前过滤，HAVING是分组后过滤
+       WHERE不能对聚合函数进行判断，执行顺序:where > 聚合函数 > having
+
+7.分页查询
+  SELECT .. FROM .. LIMIT 起始索引，查询记录数;
+  比如: SELECT * FROM BASE LIMIT 0,10;
+
+编写顺序:
+SELECT .. FROM .. WHERE .. GROUP BY .. HAVING .. ORDER BY .. LIMIT ..
+执行顺序:
+1.FROM
+2.GROUP BY + HAVING
+3.SELECT
+4.ORDER BY + LIMIT
+ 
+------
+3.流程函数
+  SELECT IF(value,a,b); //value为true返回a，否则返回b
+  SELECT IFNULL(value1,value2);  //如果value1不为空，返回value1，否则返回value2
+
+——————————————————————————————————————————————————————————————————————————————————————————————
+约束：
+    约束是作用于表中字段的规则，用于限制存储在表中的数据
+    分类:
+        1.非空约束 -- 限制该字段的数据不能为null 【NOT NULL】
+        2.唯一约束【UNIQUE】
+        3.主键约束 -- 住建是一行数据的唯一标识，要求非空且唯一【primary KEY】 --一张表一定要有一个主键
+        4.默认约束 -- 保存数据时，如果没有指定该字段的值，采用默认值【DEFAULT】
+        5.检查约束 -- 保证字段值满足某一条件 【CHECK】
+        6.外键约束 -- 用来让两张表的数据之间建立连接，保证数据的一致性和完整性【FOREIGN KEY】--至少有两张表
+        【约束是作用于表中字段上的，可以在创建/修改表时添加约束】
+                外键：
+                     1.具有外键的表称为子表，外键所关联的表称为父表
+————————————————————————————————————————————————————————————————————————————————————————————————————
+多表查询：
+ 多对多：
+      建立第三张中间表，中间表至少包含两个外键，分别关联两方的主键
+ 一对一：
+      在任意一方加入外键，关联另一方的主键，并且设置外键唯一
+
+ 1.内连接：
+         查询的是两张表中数据交集的部分(隐式内连接，显示内连接)
+         语法：
+             SELECT .. FROM ..(表1) INNER JOIN ..(表2) ON ..(连接条件) ;
+            例如： select e.name,d.name from emp e inner join dept d on e.id = d.id;
+ 2.外连接：
+         1.左/右外连接：
+                   select .. from .. left(right) outer join ..on ..;
+          【查询的是左(右)表的所有数据和交集的数据】
+ 3.自连接：
+         把一张表看做两张表(必须起别名)
+ 4.联合查询：
+         union：把多次查询的结果合并，形成一个新的查询结果集
+         select .. from .. 
+         UNION (all)  
+         select .. from ..;
+         【tip: union all是直接合并所有结果，union会去重】
+         【联合查询的多张表列数，字段类型必须一致】
+5.子查询：
+        sql语句中嵌套select语句，称为嵌套查询(子查询)
+        select .. from .. where test1 = (select .. from ..)
+                                               ↑根据子查询结果不同，分为：
+                                                                  1.标量子查询(结果为单个值，即一行一列)
+                                                                  2.列子查询(结果为一列)
+                                                                  3.行子查询
+                                                                  4.表子查询(结果多行多列)
+ -->
