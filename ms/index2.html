@@ -18,20 +18,11 @@
     </style>
   </head>
   <body>
-    <div class="test"></div>
-    <div class="test2"></div>
     <script>
-      const driver = new Driver();
-      driver.defineSteps([
-        {
-          element: ".test",
-          popover: {
-            title: "Title",
-            description: "Description",
-          },
-        },
-      ]);
-      driverObj.start();
+      let ori = { a: 1, b: 2, c: { love: "dks", fancy: { thanks: "hhh" } } };
+      let copy = { ...ori };
+      copy.c.fancy = { l: "s" };
+      console.log(ori);
     </script>
   </body>
 </html>
