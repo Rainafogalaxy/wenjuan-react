@@ -47,6 +47,7 @@ let copy4 = ori4.concat();
      (1)不能正确处理Date对象，Date对象会被转换成字符串
      (2)不能拷贝undefined，Symbol和函数，这些值在序列化过程中会被忽略或转换为null
      (3)不支持循环引用，会抛出错误
+     (4)不能复制Map，Set，RegExp，BigInt等特殊类型
 
 2.递归方法：遍历对象，数组，直到里面都是基本数据类型
 tip：深拷贝解决循环引用的问题，可以额外开辟一个存储空间，来存储当前对象和拷贝对象的对应关系，当需要拷贝当前对象时，
@@ -520,6 +521,7 @@ function flatArr2(arr) {
 
 /* 
   24. 讲一下https(TLS四次握手)
+  【Https是在Http和tcp之间加了一层SSL/TLS安全层】
     (一般的通信都是先进行非对称加密来进行秘钥交换，然后再进行对称加密进行通信)
     (非对称加密 + 对称加密的方式虽然看起来可靠，但最大的问题是中间人攻击(MITM)：黑客会拦截到客户端发送的公钥请求，然后将自己的公钥返回给客户端，等下次客户端发送消息时，黑客会用自己的私钥来解密，所以要引入CA机构，因为客户端并不知道自己获取的公钥是否安全)
     (CA过程：CA机构有自己的私钥和密钥，服务端会发送自己的公钥给CA来验证，然后CA机构用自己的私钥给服务端的公钥进行签名，以此来证明这个服务端是经过验证过的)
@@ -803,19 +805,202 @@ module.exports = {
     },
   },
 };
-// vite.config.js文件
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-export default defineConfig({
-  plugins: [Vue()],
-  css: {
-    postcss: {
-      plugins: [
-        require("postcss-pxtorem")({
-          rootValue: 16,
-          propList: ["*"],  
-        }),
-      ],
+// tip：如果要在Vite中使用postCSS的插件，只需要在根目录中添加postcss.config.js文件，然后配置即可，
+// Vite会自动识别这个配置文件，然后处理CSS
+// 安装插件： npm i postcss postcss-pxtorem --save-dev
+// Vite使用PostCSS作为它处理CSS的一部分，当存在postcss.config.js时，Vite会自动加载并应用这个配置
+
+/* 
+ 另外，除了将px转换为rem，也有其他的转换插件：
+    (1). postcss-px-to-viewport
+*/
+
+module.exports = {
+  plugins: {
+    "postcss-px-to-viewport": {
+      viewportWidth: 1920, //视口宽度
+      viewportHeight: 1080, //视口宽度
+      unitPrecision: 5, //单位转换后保留的精度
+      viewportUnit: "vw", //转换为视口单位的类型，可以是'vw'或'vh'
+      fontViewportUnit: "vw", //字体使用的视口单位
+      selectorBlackList: [], //要忽略的选择器
     },
   },
+};
+
+/* 
+  38：什么是source map，为什么vue可以在浏览器直接显示报错行数？
+     -->是一种映射技术，用于将压缩或转译后的代码映射回源代码，在使用webpack等压缩工具时，会在转译过程中自动生成Source map
+*/
+
+//  --> Webpack.config.js中配置文件中通过devtools属性来配置source map：
+module.exports = {
+  devtools: "source-map", //这里适用于生产环境，如果是开发环境下，写'eval-source-map'
+};
+//  --> Vite:
+export default defineConfig({
+  build: {
+    sourcemap: true, //生产环境
+  },
+  /*  --> 属性值：1. true 生成完整的source map
+                 2. false 不生成source map(默认值)
+                 3. 'inline' 将source map嵌入到生成的文件中，而不是生成单独的.map文件 
+  */
 });
+/*
+   tip: 在Vite的开发服务器中，默认情况就会使用source map，
+    --> 1. source map 是否会影响页面的性能？
+             source map主要用于开发和调试过程，它只有在打开dev tools时才会开始加载，一般来说不会，但是开启它会占用浏览器的内存，
+             因为浏览器需要再额外去处理这些映射信息和源文件(应该确保只在开发环境下使用source map);
+             如果要在生产环境中使用(通常是用来监控和调试生产环境中的错误)，也要确保这些源文件不会对用户公开
+             (通常是在Nginx或Apache服务器上配置规则来限制)
+    --> 2.浏览器是怎么知道source map和源文件的关系的？
+            在打包工具输出的文件中，如果开启了source map，就会在代码的下方看到特殊的注释，就是对应的源文件地址
+    --> 3.source map是怎样对应到源代码的？
+            首先，一个source map文件通常是一个JSON格式的文件，下面是主要组成部分：
+                 1. Version : source map 规范版本，一般是3
+                 2. File ： 转译后的文件名称
+                 3. Sources： 一个包含所有原始文件名的数组
+                 4. SourceRoot：(可选)所有源文件路径的根目录
+                 5. Names：包含原始代码中变量和属性名的数组
+                 6. Mappings：source map的核心，是一个经过(VLQ)编码的字符串
+                 描述了转译后的代码中每个位置与源代码中相应位置的映射
+*/
+
+/* 
+  39.数组去重的方法？
+       1.Set数据结构 + Array.from()
+       2.双重for循环 + splice(去除)
+       3.forEach() + inCludes()
+       4.forEach() + indexOf()
+       5.filter() + indexOf()
+       ...
+*/
+
+/* 
+  40.js中"="(赋值)与浅拷贝有区别吗？
+    对于基本数据类型来说没什么区别，对于引用数据类型，赋值不会创建新对象，而浅拷贝会
+*/
+
+/* 
+   41. 在package.json文件中，dependencies和devDependencies有什么区别？
+        -->dependencies 列出了项目在生产环境中运行所需要的依赖，比如说如果项目使用Vue框架开发，那么vue就应该在这里
+        -->devDependencies 列出了只在开发环境中需要的依赖包，这些依赖主要用于开发过程(在生产环境中不是必须的，比如说单元测试，
+        代码格式化工具eslint等，都应该在这里)
+        区分这两者可以：
+                  1.优化生产环境，只将必要的包部署到生产环境，可以减小生产环境的大小，优化应用的加载时间和性能；
+                  2.安全性：减少生产环境的大小，优化应用的加载时间和性能；
+        使用npm或yarn时：
+             1. 安装生产依赖：npm i package-name --save  
+                【从npm 5 开始默认就是将依赖添加到dependencies，所以--save也可以省略】  yarn add package-name
+             2. 安装开发依赖: npm i package-name --save-dev 
+                【会添加到devDependencies】 yarn add package-name --dev
+*/
+
+/* 
+  42.Jquery和Vue的区别？
+    (1)Jquery本质是只是让在js中操作dom，事件处理，选择元素的方式比原生更简单一些，方便写代码；
+    (2)而vue是一个js框架，它的核心是MVVM模型，vue提供了一套完整的用于开发页面的(特别是单页面应用的工具)，比如路由管理，组件系统。
+       模板语法，内置指令和内置组件等；它对于页面的DOM元素的处理，采用虚拟DOM的比对方式，通过快速Diff算法，
+       对要发生变化的dom元素进行相应的排序和变更，在更新视图的变化，一定程度上减少了DOM操作对页面性能的开销；
+*/
+
+/* 
+  43. Vite的依赖预构建？【在开发环境中，且在第一次启动开发服务器时执行】
+       (主要是为了项目中的第三方库，因为这些第三方包并不一定是ES模块格式，而且有些包的数量很多，
+        直接加载会影响性能(因为会发起很多网络请求))
+       (Vite可以将这些小文件打包成更少的文件)
+   3.预构建的结果会被缓存下来
+      -->优点：1.开发环境下，可以快速启动服务器
+              2.减少请求，将多个依赖合并到少数几个ESM包中，减少了浏览器在模块开发过程中需要处理的请求数量
+              3.确保不是以ES模块格式提供的依赖，也可以在现代浏览器中运行
+  【Vite开发模式中使用esbuild，生产模式下使用Rollup】
+    预构建过程：
+          (1)当启动Vite开发服务器时，Vite检查node_modules中的依赖
+          (2)Vite决定哪些依赖需要预构建，通常会包括所有的第三方库
+          (3)执行：Vite使用esbuild将所有选定的依赖于大宝成少数几个或单个优化过的文件(将多个小模块合并为较大模块)
+          (4)缓存：预构建的结果会被缓存下来，下次启动开发服务器时，只有在依赖项发生变化时才会重新预构建
+*/
+
+/* 
+ 44.移动端横竖屏切换方案？
+    (1)CSS媒体查询：
+      @media(orientation: landscape){  //横屏时方案
+         ...
+      }
+      @media(orientation: portrait){  //竖屏时方案
+         ...
+      }
+
+    (2)JavaScript提供屏幕方向API，允许JS直接访问和监听设备的屏幕方向变化
+       window.addEventListener('orientationchange',()=>{
+            switch(window.orientation){
+               case 0:
+               case 180:
+                   //竖屏
+                   break;
+               case -90：
+               case 90：
+                    //横屏
+                    break;
+            }
+       })
+
+    (3)使用第三方库
+*/
+
+/* 
+  45.z-index有什么限制？
+     (1)仅对定位的元素生效
+     (2)使用z-index的元素会创建一个新的堆叠上下文
+     (3)只在它自己存在的堆叠上下文中生效
+     (4)过多使用z-index会影响性能(浏览器要管理更复杂的堆叠上下文)
+     【tip：当多个元素在页面上的同一位置时，堆叠上下文用来确定这些元素的显示顺序】
+*/
+
+/* 
+ 46.什么是BFC(块级格式上下文)？
+    -->BFC(块级格式上下文),是页面中的一个独立的渲染区域，处于BFC内部的元素会与外部的元素隔离(布局之间不影响)
+       触发BFC：
+             (1)根元素或其他包含它的元素
+             (2)浮动的元素(float)
+             (3)position: absolute/fixed
+             (4)display:inline-block
+             (5)overflow: 不是visible的块元素
+             (6)display：flex
+             (7)display: grid
+             ...等等
+             【BFC可以解决一些布局问题，比如外边距重叠，或清除浮动】
+*/
+
+/* 
+ 47.TCP与UDP的区别？
+   (都是传输层协议)
+   (1). TCP是面向连接的协议，数据在传输前一定要三次握手，来保证消息在传输过程的完整性与可靠性，如果数据包丢失或出错，
+        tcp会重新发送;tcp发送的是字节流，接收方会按照发送顺序来接收
+   (2). UDP是无连接的协议，数据可以直接发送给接收方，但不能保证数据完整也不能保证数据一定送达，也不会验证接收方是否接受到了数据，
+        也不会提供重发机制和错误检查，但是相对于tcp，因为缺少了繁琐的握手过程，所以延迟一般较低，比价适合流式传输;
+        udp以数据报的形式发送信息，每个数据报都独立包装，传输。
+
+        【头部开销：tcp的头部最小20字节，包含很多用于确保数据可靠传输的信息：序列号，确认号，数据偏移等
+                   udp头部开销小，只有8字节，包括源端口号，目标端口号，长度和校验和
+         】
+*/
+
+/* 
+  48.tcp是怎么保证数据完整可靠的？
+    (1).三次握手过程
+    (2).序列号与确认应答：每个TCP段都会被分配一个序列号，接收方通过发送ACK来响应已成功接收的数据包，如果发送的数据包没有被确认，
+        就会重新发送
+    (3).数据重传(tcp有个定时器，设定时间内没有收到确认响应，就重发)
+    (4).有序的数据传输和数据整合(确保数据是按序列号处理的，没有按照顺序到达的数据会被缓存起来，直到所有消息段都到达后，会被一起提交给
+       应用层)
+    (5).四次挥手过程
+*/
+
+/* 
+49.tcp三次握手？
+49.1 tcp四次挥手？
+
+
+*/

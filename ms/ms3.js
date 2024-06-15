@@ -69,7 +69,6 @@
 14.有哪些衡量网页性能的指标和方法？
 15.pinia和vuex有啥区别？
 16.关于nextTick？
-17.数组的方法有哪些？
 18.CSRF攻击，XSS攻击，用来防御的常见场景？
 
 20.MVVM是什么？
@@ -79,31 +78,10 @@
 24.首屏优化的关键指标？
 25.关于响应状态码
 26.事件循环？
-27.Jquery和Vue的区别？
-  Jquery本质是只是让在js中操作dom，事件处理，选择元素的方式比原生更简单一些，方便写代码；
-  而vue是一个js框架，它的核心是MVVM模型，vue提供了一套完整的用于开发页面的(特别是单页面应用的工具)，比如路由管理，组件系统。模板语法，内置指令和内置组件等；
-  它对于页面的DOM元素的处理，采用虚拟DOM的比对方式，通过快速Diff算法，对要发生变化的dom元素进行相应的排序和变更，在更新视图的变化，一定程度上减少了DOM操作对页面性能的开销；
 
 29.可不可以让promise的状态不管成功还是失败都并行结束？
 
 
-
-31. 在package.json文件中，dependencies和devDependencies有什么区别？
-   -->dependencies 列出了项目在生产环境中运行所需要的依赖，比如说如果项目使用Vue框架开发，那么vue就应该在这里
-   -->devDependencies 列出了只在开发环境中需要的依赖包，这些依赖主要用于开发过程(在生产环境中不是必须的，比如说单元测试，代码格式化工具eslint等，都应该在这里)
-     区分这两者可以：
-               1.优化生产环境，只将必要的包部署到生产环境，可以减小生产环境的大小，优化应用的加载时间和性能；
-               2.安全性：减少生产环境的大小，优化应用的加载时间和性能；
-     使用npm或yarn时：
-                    1. 安装生产依赖：npm i package-name --save  【从npm 5 开始默认就是将依赖添加到dependencies，所以--save也可以省略】  yarn add package-name
-                    2. 安装开发依赖: npm i package-name --save-dev 【会添加到devDependencies】 yarn add package-name --dev
-32. Vite的依赖预构建？(主要是为了项目中的第三方库，因为这些第三方包并不一定是ES模块格式，而且有些包的数量很多，直接加载会影响性能(因为会发起很多网络请求))
-   1.当第一次运行Vite时，vite首先会检查项目中的package.json文件，找出项目中应用的所有依赖
-   2.vite会预构建(预打包)这些依赖到node_modules/.vite目录中，(esbuild)
-   3.预构建的结果会被缓存下来
-      -->优点：1.开发环境下，可以快速启动服务器
-              2.减少请求，将多个依赖合并到少数几个ESM包中，减少了浏览器在模块开发过程中需要处理的请求数量
-              3.确保不是以ES模块格式提供的依赖，也可以在现代浏览器中运行
 33.对useCallback，useMemo这两个hook的理解，有什么区别？以及适合在什么场景下应用？
   1.useMemo()
       参数一个函数和一个依赖数组
@@ -148,7 +126,7 @@
          按需加载：虽然ESM不支持动态导入，但可以使用import()函数来实现按需加载
          -->与之相比，CommonJS模块系统是动态的，即require可以在代码的任何地方使用(函数和条件语句)，但同时构建工具在解析和优化时就需要处理更多的复杂关系
 
-  ==》 webpack 的Loader和Plugin：
+  ==> webpack 的Loader和Plugin：
       1. Loader是用于转换模块的，它们允许在import或require模块时预处理文件，Loader本质上是一个函数，接受源文件作为输入，然后返回转换后的结果，从而实现对文件的一系列转换；
       预处理：在文件进入打包过程之前对其进行预处理
       2. Plugin用于执行从打包到完成的各种任务和自定义功能，与Loader专注于将一种文件类型转换为另一种文件类型不同，它能参与到构建过程的各个阶段，
@@ -263,10 +241,8 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
 54.文件断点续传 + 切片上传？
 55.不知道盒子的宽高情况下，怎样让元素垂直居中？
 56.transform的属性？
-
-59：z-index有什么限制？
 60：说一下重绘重排？
-61：移动端横竖屏切换方案？
+
 62：对Promise的理解？
 ——————————————————————————————————————————————————————————————————————————————————————
 
@@ -276,53 +252,18 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
 66：输入url到页面渲染的过程？(...hh)
 67: git有哪些命令？以及版本控制？
 ———————————————
-71：什么是source map，source map为什么vue可以在浏览器直接显示报错行数？
-    -->是一种映射技术，用于将压缩或转译后的代码映射会源代码，在使用webpack等压缩工具时，会在转译过程中自动生成Source map
-       --> Webpack.config.js中配置文件中通过devtools属性来配置source map：
-        -->module.exports = {
-                devtools: 'source-map', //这里适用于生产环境，如果是开发环境下，写'eval-source-map'
-           }
-       --> Vite:
-                --> export default defineConfig({
-                       build:{
-                          sourcemap:true  //生产环境
-                       }
-                   })
-                   --> 属性值：1. true 生成完整的source map
-                              2. false 不生成source map(默认值)
-                              3. 'inline' 将source map嵌入到生成的文件中，而不是生成单独的.map文件
-                   tip: 在Vite的开发服务器中，默认情况就会使用source map，
-    --> 1. source map 是否会影响页面的性能？
-          source map主要用于开发和调试过程，它只有在打开dev tools时才会开始加载，一般来说不会，但是开其他会占用浏览器的内存，
-          因为浏览器需要再额外去处理这些映射信息和源文件(应该确保只在开发环境下使用source map);
-          如果要在生产环境中使用(通常是用来监控和调试生产环境中的错误)，也要确保这些源文件不会对用户公开(通常是在Nginx或Apache服务器上配置规则来限制)
-    --> 2.浏览器是怎么知道source map和源文件的关系的？
-          在打包工具输出的文件中，如果开启了source map，就会在代码的下方看到特殊的注释，就是对应的源文件地址
-    --> 3.source map是怎样对应到源代码的？
-          首先，一个source map文件通常是一个JSON格式的文件，下面是主要组成部分：
-                         1. Version : source map 规范版本，一般是3
-                         2. File ： 转译后的文件名称
-                         3. Source： 一个包含源文件路径的列表
-                         4. SourceRoot：(可选)所有源文件路径的根目录
-                         5. Names：原始代码中变量和属性的名称列表
-                         6. Mappings：source map的核心，是一个经过编码的字符串，描述了转译后的代码中每个位置与源代码中相应位置的映射
+
 ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 72：前端工程化的目的？
 73. 场景：input中输入时，不要立即请求数据，使用防抖
 74：场景：十万个点线的图，在前端如何实现？
 75：CDN的图片为什么来自不同的域名？(浏览器对同源请求有上限)
 76：webpack对项目做了哪些优化(可以做哪些优化？)
-77：js中"="与浅拷贝有区别吗？
+
 78：webpack的常用插件？
    
 79：实习主要做了什么？遇到困难如何解决的？
-80：数组去重的方法？
-   答：1.Set数据结构 + Array.from()
-       2.双重for循环 + splice(去除)
-       3.forEach() + inCludes()
-       4.forEach() + indexOf()
-       5.filter() + indexOf()
-       ...
+
 81：CSS三栏布局实现的方案？
 82：登录常见的实现方案？(什么问题？)
 83：如何在项目中判断用户是否登录？
@@ -333,7 +274,6 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
 88：手写：原生js写登录界面，记录密码输入错误此时并展示。
 89：算法：冒泡排序
 90：算法：排序链表
-91：使用JSON.Stringify进行深拷贝的缺点？
 92：怪异盒子的padding发生改变，页面会不会发生改变？(不会改变)
 93：通过link引入的样式和通过import引入的样式有什么区别？
 94：跨域是怎么产生的？怎么解决跨域？(浏览器的同源策略)
@@ -341,7 +281,6 @@ https://github.com/xiaoyi1255/nuxt3-temple/blob/master/express/server.js
 96：webpack和vite的区别？各自的优缺点？
 97：webpack执行流程？
 98：loader是如何用的，可以干什么？
-99：js的引用数据类型？
 100：const，let，var在定义变量时底层是如何实现的？
 
 **/
