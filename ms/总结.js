@@ -796,8 +796,10 @@ console.log(result.os); //操作系统信息
 module.exports = {
   plugins: {
     "postcss-pxtorem": {
-      rootValue: 16, //自行设定
-      propList: ["*"],
+      rootValue: 16, //自行设定(是根元素的大小)
+      propList: ["*"], //propList是一个数组，用来指定哪些CSS属性应该从px转换为rem
+      // 可以指定具体的CSS属性(如['font-size','margin-top']),或使用通配符表示所有属性都转换。
+      // 也可以['*','!padding*']表示转换所有属性，除了以padding开头的属性
     },
   },
 };
@@ -811,7 +813,7 @@ export default defineConfig({
       plugins: [
         require("postcss-pxtorem")({
           rootValue: 16,
-          propList: ["*"],
+          propList: ["*"],  
         }),
       ],
     },
