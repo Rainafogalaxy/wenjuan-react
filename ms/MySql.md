@@ -129,5 +129,8 @@ SELECT .. FROM .. WHERE .. GROUP BY .. HAVING .. ORDER BY .. LIMIT ..
    存储引擎：
       SHOW ENGINES ；查询当前数据库支持的存储引擎
      
-  
+    innoDB：
+         事务安全：支持；
+         锁机制：行锁
+         支持外键
    -->
