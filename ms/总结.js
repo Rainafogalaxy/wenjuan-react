@@ -1486,7 +1486,7 @@ const debounce = (func, wait) => {
     timeout = setTimeout(() => {  //在事件监听器或异步操作(如定时器)中，函数如果被直接调用，this往往不会指向预期的对象，而是指向全局对象 
       func.apply(context, args);
     }, wait);
-  };
+  };                                           
 };
 // Use it
 window.addEventListener(
