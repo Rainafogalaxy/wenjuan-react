@@ -1457,7 +1457,7 @@ for (let value of range) {
               Increment
             </button>
             <ThisIsReactComponent a = {10} b = {20} / >
-          </div>
+          </div> 
         )
       }
   2.useCallback() 用来记忆函数，只有当依赖数组中的值发生变化时，才会返回一个新的函数
@@ -1471,18 +1471,19 @@ for (let value of range) {
       依赖数组中的元素是否变化，以此来决定他们两个的返回值，如果依赖数组很大或计算函数比较复杂，性能会因此下降
 */
 
-/* 
+/*  
   72.防抖和节流怎么实现？
-  首先防抖(Debouncing),使目标函数在事件触发后的指定时间后执行，如果在此期间重复触发，会重新计时；
-  【避免因频繁触发事件而执行不必要的操作】
-  eg.
-  const debounce = (func, wait) => {
+   首先防抖(Debouncing),使目标函数在事件触发后的指定时间后执行，如果在此期间重复触发，会重新计时；
+   【避免因频繁触发事件而执行不必要的操作】
+   eg.
+*/
+const debounce = (func, wait) => {
   let timeout;
   return () => {
     const context = this,
-      args = arguments;
+      args = arguments;  //解决函数调用时的上下文问题
     clearTimeout(timeout);
-    timeout = setTimeout(() => {
+    timeout = setTimeout(() => {  //在事件监听器或异步操作(如定时器)中，函数如果被直接调用，this往往不会指向预期的对象，而是指向全局对象 
       func.apply(context, args);
     }, wait);
   };
@@ -1494,15 +1495,17 @@ window.addEventListener(
     console.log("我执行了");
   }, 300)
 );
-  节流(throttling),确保函数在一定时间间隔内只执行一次，即使事件被多次触发，函数也只是周期性执行；
-  【保证在给定的时间内至少执行一次，适合于需要连续响应用户操作的场景】
-  // 节流：(在指定的时间间隔内最多只执行一次)
+/*  节流(throttling),确保函数在一定时间间隔内只执行一次，即使事件被多次触发，函数也只是周期性执行；
+  【保证在给定的时间内至少执行一次，适合于需要连续响应用户操作的场景】 */
+// 节流：(在指定的时间间隔内最多只执行一次)
 const throttling = (fn, limit) => {
-  let inThrottle;  //标志变量，用于记录是否在冷却时间；
-  return function () {  //返回一个新函数，封装了原始的fn函数，控制它的执行频率
+  let inThrottle; //标志变量，用于记录是否在冷却时间；
+  return function () {
+    //返回一个新函数，封装了原始的fn函数，控制它的执行频率
     const context = this,
       args = arguments;
-    if (!inThrottle) { //为false
+    if (!inThrottle) {
+      //为false
       fn.apply(context, args);
       inThrottle = true;
       setTimeout(() => (inThrottle = false), limit);
@@ -1516,7 +1519,6 @@ window.addEventListener(
     console.log("我执行了"), 300;
   })
 );
-*/
 
 /* 
   73. XSS 和 CSRF？
@@ -1612,6 +1614,7 @@ window.addEventListener(
 
 /* 
   74.进程和线程的区别和联系？
+   【可以说一个运行的软件就是一个进程】
      (可以说进程是包含线程的，即线程是进程的子集)
      进程： 是运行在系统内存中的程序，每个进程都有自己单独的地址空间
      【资源分配的基本单位】
@@ -1620,6 +1623,9 @@ window.addEventListener(
      【CPU调度的基本单位】
      【线程间资源共享，一个线程崩溃可能会影响到同一进程中的其他线程】
      --->一个进程可以包含一个或多个线程。
+       74.1 并发与并行？
+           并发： 在同一时刻，有多个指令在单个CPU上交替执行(CPU在多个线程之间交替执行)
+           并行： 在同一时刻，有多个指令在多个CPU上同时执行(电脑只有一个cpu，但它分为x核x线程，代表可以同时处理多少个线程 )
 */
 
 /* 
