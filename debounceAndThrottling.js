@@ -41,16 +41,3 @@ window.addEventListener(
   })
 );
 
-// 防抖
-// 防抖是让目标函数在事件触发的指定时间后执行，如果重复触发会取消上一次函数执行
-const mydebounce = (func, wait) => {
-  let timeout;
-  return () => {
-    const context = this;
-    const arg = arguments;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func.apply(func, wait);
-    }, wait);
-  };
-};
