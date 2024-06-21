@@ -1486,7 +1486,7 @@ const debounce = (func, wait) => {
     timeout = setTimeout(() => {  //在事件监听器或异步操作(如定时器)中，函数如果被直接调用，this往往不会指向预期的对象，而是指向全局对象 
       func.apply(context, args);
     }, wait);
-  };                                           
+  };                                            
 };
 // Use it
 window.addEventListener(
@@ -1702,6 +1702,65 @@ window.addEventListener(
 */
 
 /* 
+  80. git的命令？
+     1. git add . / xxx  添加全部修改的文件/某个文件到暂存区，多个文件用空格区分
 
+     2. git commit -m 'message' 提交暂存的更改，并留下备注
+     3. git commit -am 相当于git add . && git commit -m
+     4. git commit --amend 对最近一次提交的信息进行修改，(会修改commit的hash值)
 
+     5. git pull <远程主机名> <远程分支名>：<本地分支名> //从远程仓库拉取代码并合并到本地
+         -->相当于git fetch && git merge
+            1. git fetch 会从远程仓库获取最新的分支状态，但不会修改工作目录
+            2. git merge会将拉取下来的远程分支合并到当前分支(通常是和当前分支同名的)
+            -->这种合并操作会在git历史中创建一个新的合并历史(merge commit)
+     6. git pull --rebase <远程主机名> <远程分支名>：<本地分支名> 
+          -->相当于 git fetch && git rebase
+          -->git rebase将本地当前分支上的所有未推送的提交转移到拉取下来的远程分支的顶端(它会先把本地分支回退到两个分支的共同祖先，然后逐个应用远程分支上的提交)
+
+     7. git fetch 只拉取远程分支，不自动进行merge操作
+         1.git fetch -all 获取远程仓库所有分支的更新
+    
+     8. git rebase
+        git merge 都是合并分支操作
+
+        1. git merge  将多个分支合并，如果存在冲突，git会停止并要求手动解决冲突，没有会顺利进行合并
+                      特点：合并会保留历史，所有历史提交都将保留在合并后的历史中
+        2. git rebase 特点：
+                          1.首先 git rebase 需要确定两个分支的分叉点，即这两个分支最后一次的共同提交
+                          2.取出并暂存当前分支上分叉点之后的所有提交
+                          3.然后将当前分支的头部移动到目标分支的最新提交上
+                          4.然后git逐个将每个提交应用到最新的基底上
+                          -->会改变提交历史，是历史更加线性易读
+     9. git checkout 传统切换分支指令，它可以：
+                               1.切换到已存在的分支
+                                  git checkout <branch-name>
+                               2.创建新分支并切换到该分支上
+                                  git checkout -b <new-branch-name>
+                               3.恢复工作目录中的文件到某一特定版本
+     10. git switch (推荐使用)
+                  1. git switch <branch-name> 切换到已经存在的分支
+                  3. git switch -c <new-branch-name> 创建分支并切换到该分支
+
+     11. git branch <branch-name> 创建分支
+     12. git branch 查看本地分支
+     13. git branch -r 查看远程分支
+     14. git branch -a 查看本地和远程分支
+     15. git branch -d <branch-nane> 删除本地分支  
+        【-d:git会检查要删除的分支是否已经完全合并到当前分支，如果没有，git会阻止，如果确定要删除，可以使用-D,或 --delete --force】
+     16. git branch -m <old-branch-name> <new-branch-name> 重命名分支
+     17. git push origin(远程仓库的名称) --delete <branch-name> 删除远程分支
+
+     18. git status 查看当前工作目录和暂存区的状态,显示当前分支的状态，包括哪些文件被修改，暂存，未跟踪的状态
+
+     19. git log 查看提交历史
+
+     20. git stash 临时保存修改，清理工作目录(当需要切换分支但工作目录中有未完成的工作时，可以用这个命令保存当前的工作进度)
+                   它将更改存放在一个本地的stash栈中
+     21. git stash apply 将存储的更改重新应用到当前工作目录中的命令，不会溢出stash栈中的记录
+
+    //  git cherry-pick 是什么
+    // git revert 回滚
+    // git stash 暂存文件
+    // git alias 提升工作效率
 */
