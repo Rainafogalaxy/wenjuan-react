@@ -1077,6 +1077,16 @@ export default defineConfig({
 
 /* 
   51.Vue2与Vue3的区别？
+     1.Vue2使用的选项式API，Vue3是组合式API，组合式API更适合逻辑复用和处理复杂组件，在vue2中，组件的响应式数据要写在data中，方法写在method中，这种分散式的写法，
+       可能在较复杂的项目中，造成代码的难以理解和阅读。
+     2.生命周期钩子不一致，vue3中删除了vue2里面的beforeCreate和Created两个生命周期，变为setup()来替代，setup的执行时间是vue在执行整个渲染组件流程中第一个遇到的钩子。
+       destroyed替换为unMounted。
+     3.响应式原理不一样，vue2使用Object.defineProperty()，监听对象属性的变化，但因为需要对对象进行深度递归遍历，对于复杂且嵌套层级很深的对象来说性能会比较差。
+       vue3使用proxy代理对象来重构响应式系统，使用了多种数据结构，比如map，weakMap，set等共同维护了在要代理的对象和对应对象要操作的属性以及对应的副作用函数之间的关系，
+       把所有的读取和修改操作都变成函数来执行，当读取对象时，收集当前的副作用函数到副作用函数栈中，当修改对象的属性时，根据weakMap的一一对应关系，将对应的副作用函数弹出并执行；
+       不仅是对于对象的直接读取操作，在js中函数调用或枚举等操作都有对应的基本语义，只要在proxy中拦截到对应的寓意操作，就可以实现响应式。
+     4.所使用的diff算法不一样
+     5.vue3对ts提供了很好的支持
 */
 
 /* 
@@ -1481,12 +1491,13 @@ const debounce = (func, wait) => {
   let timeout;
   return () => {
     const context = this,
-      args = arguments;  //解决函数调用时的上下文问题
+      args = arguments; //解决函数调用时的上下文问题
     clearTimeout(timeout);
-    timeout = setTimeout(() => {  //在事件监听器或异步操作(如定时器)中，函数如果被直接调用，this往往不会指向预期的对象，而是指向全局对象 
+    timeout = setTimeout(() => {
+      //在事件监听器或异步操作(如定时器)中，函数如果被直接调用，this往往不会指向预期的对象，而是指向全局对象
       func.apply(context, args);
     }, wait);
-  };                                            
+  };
 };
 // Use it
 window.addEventListener(
@@ -1754,13 +1765,119 @@ window.addEventListener(
      18. git status 查看当前工作目录和暂存区的状态,显示当前分支的状态，包括哪些文件被修改，暂存，未跟踪的状态
 
      19. git log 查看提交历史
+         git log --oneline 简化日志输出
 
      20. git stash 临时保存修改，清理工作目录(当需要切换分支但工作目录中有未完成的工作时，可以用这个命令保存当前的工作进度)
                    它将更改存放在一个本地的stash栈中
      21. git stash apply 将存储的更改重新应用到当前工作目录中的命令，不会溢出stash栈中的记录
+     
+     22. git cherry-pick 用于将某个分支上的单个提交(或一系列提交)应用到当前分支【允许选择性地复制一个或多个提交到当前的工作分支，而不需要进行完整的分支合并】
+           -->使用方法：
+              git cherry-pick <commit-hash>
+              git cherry-pick <start-commit-hash>^..<end-commit-hash> 应用于多个连续的提交，^表示范围
+              1.关于哈希值：可以使用git log寻找哈希值[默认情况，哈希值显示长格式，但实际只需取前七位即可]
+     23. git revert 
+         git reset  撤销一个或多个已有的提交【会更改历史】
+            1. git reset 在本地回退，可以更改HEAD，暂存区，工作目录的状态
+               git reset --soft HEAD~1  --soft模式下，git reset将HEAD指针移动到指定的提交，但不改变索引(暂存区)和工作目录，主要用于撤销 git commit而不撤销 git add
+               git reset --misxed(默认) 都撤销
+               git reset --hard HEAD 彻底回退，会丢失所有未提交的更改
+            
+           2. git revert【更安全，不改变历史】【首选】
+              git revert HEAD 创建一个新提交，它是旧提交的反向操作
+*/
 
-    //  git cherry-pick 是什么
-    // git revert 回滚
-    // git stash 暂存文件
-    // git alias 提升工作效率
+/* 
+  81.Vite和Webpack的不同
+     Vite架构：
+        1.Vite开发环境下使用esbuild进行依赖预构建，而且它利用现代浏览器原生支持esm(ES module)的特点提供了快速开发启动和热更新，
+          在开发模式下，Vite不进行打包操作，而是通过服务器动态提供模块；
+          【Vite的开发服务器主要是主要是按需编译和提供源文件
+             1.当浏览器请求一个模块时，Vite首先检查请求的资源
+             2.如果是第三方依赖，它会提供通过esbuild预构建的版本
+             3.如果是源代码文件(.vue,.js,.ts等)，Vite会根据需要处理这些文件，例如使用esbuild处理typescript，然后直接发送到浏览器
+          】
+       
+          Vite生产环境使用Rollup进行打包，Rollup使用tree shaking来移除未使用的代码，理论上可以减少最终打包的体积；
+               rollup也支持esm，拥有丰富的插件系统，允许在生产构建中添加各种功能，比如代码压缩，css预处理，图像优化等
+
+               生产构建流程：
+                        1.预构建：与开发模式下类似，使用esbuild对依赖转换为ESM，以便让Rollup更高效地处理它们。
+                        2.预构建完成后，Vite调用Rollup处理所有资源，Rollup会分析到项目中的所有模块，然后执行tree shaking，合并代码。
+                          【解析动态导入，优化模块的加载顺序，代码分割】
+                        3.打包后，可能还会执行后续处理步骤，比如压缩js，css，html文件(使用Rollup插件完成)
+                        4.输出构建产物
+  
+    Webpack：
+         适合于构建大型项目，或需要兼容旧系统或多种技术栈的项目，webpack支持多种模块定义。
+         架构：
+            1.入口(Entry):是用来构建内部依赖图的起点
+            2.输出(Output):告诉webpack在哪里输出所创建的bundles，以及如何命名
+            2.loaders ：webpack只能理解json和js文件，loadera可以让webpack能处理其他类型的文件，并将他们转换为有效模块，以供应用程序使用
+            3.plugins：插件用于执行范围更广的任务
+            4.mode
+
+
+        //  https://wangdoc.com/typescript/intro
+    81.1 Vite 和 Webpack 的热模块替换(HMR)?
+         1.webpack 的HMR：
+                       通过websocket来实现的，服务器端监听文件变动，并在代码变化时向客户端发送更新；
+                       热替换过程(更新的模块会通过websocket发送到浏览器，替换旧模块，不用刷新页面)
+         2.Vite 的HMR：
+                    也是websocket，vite对每个模块提供http服务，浏览器可以直接请求这些模块
+                    当文件有改动，它只需要重新编译改动的部分
+*/
+
+/* 
+  82.TS有一个接口A，让接口B只继承A中的a,b,c三个属性，怎么做？
+     假设有个接口A：
+     interface A{
+         a:string;
+         b:number;
+         c:boolean;
+         d:Date;  //假设不让B继承这个属性
+     }
+     
+     接口B：
+     interface B extends Pick<A,'a' | 'b' | 'c'>{}
+                         ^^^^^^^^^^^^^^^^^^^^^^^的作用是从A中挑选'a','b','c'这三个属性来创建一个新类型，然后B接口通过继承这个新类型  
+*/
+/* 
+ 83.flex：1 的含义？
+    首先，flex属性是flex-grow,flex-shrink,flex-basis的简写，默认值为0 1 auto
+    flex-grow：元素在 flex 容器中分配剩余空间的相对比例
+    flex-shrink：指定了 flex 元素的收缩规则
+    flex-basis：指定了 flex 元素在主轴方向上的初始大小
+
+    -->当写 flex：1 时，实际上：
+           flex-grow：1; 增长因子
+           flex-shrink：1; 缩小因子
+           flex-basis：0; 默认尺寸基准值
+      flex: 1 期望多个元素平等分配父容器中的空间，例如有一个容器和三个子元素，如果给每一个子元素都设置flex:1,则每个元素都会平等地分配容器的空间，忽略它们原始的大小。
+*/
+
+/* 
+  84.非关系型数据库有什么？
+     非关系型(NoSQL): 
+               1.键值存储(key-value):数据以键值对的形式存储，键是唯一的，这种类型的数据库提供快速查询响应
+                 Redis
+               2.文档型数据库：数据以文档形式存储，通常是JSON，XML格式，这些数据库允许更复杂的数据结构(如嵌套文档)并提供丰富的查询语言
+                 MongoDB
+               3.列存储数据库
+               4.图形数据库
+*/
+/* 
+  85.React中父组件如何调用子组件的方法？
+     1.forwardRef 和 useImperativeHandle是用来处理父组件需要访问子组件中的函数或属性的特定场景。
+       -->forwardRef是一个React函数，允许将ref从父组件传递给子组件，默认情况下，函数组件不能直接接受ref属性(因为没有实例)
+         forward
+*/
+
+/* 
+  86.跨域是怎么产生的？怎么解决跨域？(浏览器的同源策略)
+*/
+
+/* 
+  87.如何检测用户离开/进入当前浏览器界面？
+
 */
