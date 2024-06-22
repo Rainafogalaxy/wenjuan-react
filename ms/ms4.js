@@ -78,7 +78,7 @@
 18.webpack 的工作流程
 19.ES5如何实现继承？对原型链的理解？
 20.require和import 的区别？
-21.webpack 的loader解决的具体问题？
+21.webpack 的 loader 解决的具体问题？
 22.
 
 

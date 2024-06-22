@@ -20,11 +20,13 @@ window.addEventListener(
 
 // 节流：(在指定的时间间隔内最多只执行一次)
 const throttling = (fn, limit) => {
-  let inThrottle;  //标志变量，用于记录是否在冷却时间；
-  return function () {  //返回一个新函数，封装了原始的fn函数，控制它的执行频率
+  let inThrottle; //标志变量，用于记录是否在冷却时间；
+  return function () {
+    //返回一个新函数，封装了原始的fn函数，控制它的执行频率
     const context = this,
       args = arguments;
-    if (!inThrottle) { //为false
+    if (!inThrottle) {
+      //为false
       fn.apply(context, args);
       inThrottle = true;
       setTimeout(() => (inThrottle = false), limit);
@@ -38,3 +40,4 @@ window.addEventListener(
     console.log("我执行了"), 300;
   })
 );
+
